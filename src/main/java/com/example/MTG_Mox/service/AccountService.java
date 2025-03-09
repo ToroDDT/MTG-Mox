@@ -11,24 +11,23 @@ import java.util.Optional;
 
 @Service
 public class AccountService {
-    @Autowired
+    private AccountRepo accountRepo;
+
     public List<Account> getAllAccounts(AccountRepo accountRepo){
         List<Account> accounts = new ArrayList<>();
         accountRepo.findAll().forEach(accounts::add);
         return accounts;
     }
-    @Autowired
-    public Optional<Account> getAccount(String id, AccountRepo accountRepo ) {return accountRepo.findById(id);}
 
-    @Autowired
-    public void addAccount(Account account, AccountRepo accountRepo){ accountRepo.save(account);}
-
-    @Autowired
-    public void updateAccount(String id, Account account, AccountRepo accountRepo){accountRepo.save(account);}
-
-    @Autowired
-    public void deleteAccount(String id, AccountRepo accountRepo){accountRepo.deleteById(id);}
+    public Optional<Account> getAccount(String id ) {return accountRepo.findById(id);}
 
 
+    public void addAccount(Account account){ accountRepo.save(account);}
+
+
+    public void updateAccount(String id, Account account){accountRepo.save(account);}
+
+
+    public void deleteAccount(String id){accountRepo.deleteById(id);}
 
 }
