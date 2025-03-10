@@ -1,0 +1,24 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="/login.css">
+</head>
+<body>
+<div th:if="${param.error}">
+    Invalid username and password.
+</div>
+<div th:if="${param.logout}">
+    You have been logged out.
+</div>
+<img src="https://wallpaperset.com/w/full/c/8/3/483552.jpg" alt="image of theros god">
+<div id="form-box">
+<form th:action="@{/login}" method="post">
+    <h2 id="Welcome">Welcome Back!</h2>
+    <div><label id="User"> User Name : <input type="text" name="username"/> </label></div>
+    <div><label id="Password"> Password: <input type="password" name="password"/> </label></div>
+    <a th:href="@{/forgot-password}">Forgot password?</a>
+    <div><input type="submit" value="Sign In"/></div>
+</form>
+</div>
+</body>
+</html>
