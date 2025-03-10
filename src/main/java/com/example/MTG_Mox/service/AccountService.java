@@ -1,8 +1,7 @@
 package com.example.MTG_Mox.service;
 
-import com.example.MTG_Mox.model.Account;
+import com.example.MTG_Mox.model.User;
 import com.example.MTG_Mox.repo.AccountRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,19 +12,16 @@ import java.util.Optional;
 public class AccountService {
     private AccountRepo accountRepo;
 
-    public List<Account> getAllAccounts(AccountRepo accountRepo){
-        List<Account> accounts = new ArrayList<>();
-        accountRepo.findAll().forEach(accounts::add);
-        return accounts;
+    public List<User> getAllAccounts(AccountRepo accountRepo){
+        List<User> users = new ArrayList<>();
+        accountRepo.findAll().forEach(users::add);
+        return users;
     }
 
-    public Optional<Account> getAccount(String id ) {return accountRepo.findById(id);}
+    public void addAccount(User user){ accountRepo.save(user);}
 
 
-    public void addAccount(Account account){ accountRepo.save(account);}
-
-
-    public void updateAccount(String id, Account account){accountRepo.save(account);}
+    public void updateAccount(String id, User user){accountRepo.save(user);}
 
 
     public void deleteAccount(String id){accountRepo.deleteById(id);}
