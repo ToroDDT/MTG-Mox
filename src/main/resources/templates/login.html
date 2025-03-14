@@ -1,24 +1,42 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
     <title>Login Page</title>
-    <link rel="stylesheet" href="/login.css">
+    <link th:href="@{/main.css}" rel="stylesheet">
 </head>
-<body>
-<div th:if="${param.error}">
-    Invalid username and password.
+
+<body class="bg-black bg-cover bg-left-center flex flex-col justify-between min-h-screen">
+<footer class="text-white">Hello</footer>
+<!-- Main content (login form) -->
+<div class="flex-1 flex justify-center items-center">
+    <div class="absolute top-1/2 transform -translate-y-1/2 w-full max-w-md bg-black bg-opacity-70 p-8 rounded-xl shadow-lg">
+        <div id="form-box" class="relative z-10 bg-zinc-950 bg-opacity-25 p-8 rounded-lg border border-opacity-50 shadow-lg">
+            <form th:action="@{/login}" method="post" class="space-y-6">
+                <h2 class="font-extrabold text-3xl text-white text-center mb-6">Welcome Back!</h2>
+
+                <div class="flex flex-col space-y-2">
+                    <label for="username" class="text-sm text-gray-400">Username:</label>
+                    <input type="text" name="username" id="username" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
+
+                <div class="flex flex-col space-y-2">
+                    <label for="password" class="text-sm text-gray-400">Password:</label>
+                    <input type="password" name="password" id="password" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
+
+                <div class="mt-6">
+                    <input type="submit" value="Sign In" class="w-full py-3 bg-blue-600 text-white font-medium rounded-lg cursor-pointer hover:bg-blue-700"/>
+                </div>
+
+                <a th:href="@{/forgot-password}" class="block mt-4 text-sm text-gray-500 hover:text-blue-500 text-center">Forgot password?</a>
+            </form>
+        </div>
+    </div>
 </div>
-<div th:if="${param.logout}">
-    You have been logged out.
-</div>
-<img src="https://wallpaperset.com/w/full/c/8/3/483552.jpg" alt="image of theros god">
-<div id="form-box">
-<form th:action="@{/login}" method="post">
-    <h2 id="Welcome">Welcome Back!</h2>
-    <div><label id="User"> User Name : <input type="text" name="username"/> </label></div>
-    <div><label id="Password"> Password: <input type="password" name="password"/> </label></div>
-    <a th:href="@{/forgot-password}">Forgot password?</a>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
-</div>
+
+<!-- Footer -->
+<footer class=" bg-black text-sky-700 text-center py-4 mt-auto">
+    <p class="text-sm text-white">Don't have an account? <a href="#" class="text-sky-700 hover:text-blue-500">Sign up!</a></p>
+</footer>
 </body>
 </html>
+

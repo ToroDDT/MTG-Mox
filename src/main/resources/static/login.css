@@ -1,86 +1,161 @@
+/* Global reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f2ef;
-            display: flex;
+html {
+    background-color: #fff;
+    width: 100%;
+    background-size: 50%;
+    background-position: center;
 
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        #Password{
-            font-weight: bold;
-        }
-        #User {
-            font-weight: bold;
-        }
-        #form-box {
-            margin: 10vw;
-            background: white;
-            padding-bottom: 5vw;
-            padding-left: 5vw;
-            padding-right: 5vw;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-        #Welcome{
-            margin-bottom: 1vw;
-            margin-top: 2vw;
-            width: a;
-        }
-        .login-container {
-            background: white;
-            padding: 40px;
-            width: 380px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            text-align: center;
-        }
-        h2 {
-            color: #0073b1;
-            margin-bottom: 20px;
-        }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+}
 
-        }
-        .error-message {
-            color: red;
-            margin-bottom: 10px;
-        }
-        input[type="submit"] {
-            width: 100%;
-            background-color: #0073b1;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 7px;
-        }
-        input[type="submit"]:hover {
-            background-color: #005582;
-        }
-        .footer {
-            margin-top: 15px;
-            font-size: 14px;
-        }
-        img {
-          width: 50%;
-          height: 100%;
-          object-fit: cover;
-        }
-        a {
-          color: black;
-          text-decoration: none;
 
-        }
+body, html {
 
-        a:hover {
-          color: gray;
-        }
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    background-color: #000;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Full-screen container for the login form */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    padding: 20px;
+    background-color: #000;
+    background-image: url('https://wallpaperset.com/w/full/c/8/3/483552.jpg');
+    background-size: cover;
+    background-position: center;
+
+}
+
+/* Transparent black overlay */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Login form box styling */
+#form-box {
+    position: relative;
+    z-index: 1;
+    background-color: #111;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+     border: 0.5px solid rgba(255, 255, 255, 0.5);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Shadow effect */
+}
+
+h2#Welcome {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+/* Styling the form labels and inputs */
+label {
+    display: block;
+    text-align: left;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    color: #ccc;
+}
+
+input[type="text"], input[type="password"] {
+    margin-top: 6px;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    background-color: #222;
+    border: 1px solid #333;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 1rem;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    outline: none;
+    border-color: #0070f3;
+    background-color: #333;
+}
+
+/* Sign In button */
+input[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background-color: #0070f3;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #005bb5;
+}
+
+/* Forgot password link */
+a {
+    display: block;
+    margin-top: 12px;
+    color: #888;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #0070f3;
+}
+
+/* Error message */
+.error-message {
+    color: #ff4d4d;
+    margin-bottom: 20px;
+}
+
+/* Make the image cover only the left half of the screen */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    background-size: cover;
+    background-position: left center; /* Position the image to the left */
+    background-repeat: no-repeat;
+}
+
+/* Ensure the login container takes up the other half */
+.login-container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.7); /* Optional, to darken background */
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}

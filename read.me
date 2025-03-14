@@ -1,0 +1,5 @@
+Issue 1: When trying to compare two instances of the same object I was getting an error that saying it couldn't not find the element in the hashmap
+I found out that the equality was failing since java compares objects by reference so even though they had the same name they were treated differently
+
+Issue 2: When trying to use the Spring Security, I encountered an issue of spring finding the user but still unable to authenticate the user. I found out the the issue
+was not a database issue but had to do with password encoder not being used with the user was authenticated.

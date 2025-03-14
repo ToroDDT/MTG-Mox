@@ -12,30 +12,19 @@ import java.util.Set;
 @Component
 @Table(name = "account_user")
 public class User {
-    @Id
-    private  long id;
-    private String username;
-    private String password;
-    private String token;
-    private Date expirationDate;
-    @ManyToMany
-    private Set<Role> roles;
-    public User(){
+    public User( String username, String password, Set<Role> roles) {
 
-    }
-
-    public User(long id, String username, String password, String token, Date expirationDate, Set<Role> roles) {
-        this.id = id;
         this.username = username;
         this.password = password;
-        this.token = token;
-        this.expirationDate = expirationDate;
         this.roles = roles;
     }
 
+    public User(String username, String password){
+        this.username = username;
+        this.password = password;
+    }
 
 
-    // Getters and setters
     public String getUsername() {
         return username;
     }
@@ -52,27 +41,21 @@ public class User {
         this.password = password;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public Date getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(Date expirationDate) {
-        this.expirationDate = expirationDate;
-    }
     public Set<Role> getRoles() {
-        return roles;  // Return the roles associated with the user
+        return roles;
     }
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+    @Id
+    private String username;
+    private String password;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Role> roles;
+    public User(){
+
+    }
+
 }
 

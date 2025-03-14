@@ -11,6 +11,8 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AccountConstraint {
     String message () default "Invalid data";
-    Class<?> [] groups() default {};
+    Class<?> [] groups() default {
+
+    };
     Class<? extends Payload> [] payload() default {};
 }
