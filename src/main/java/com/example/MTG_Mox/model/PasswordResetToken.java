@@ -1,9 +1,15 @@
 package com.example.MTG_Mox.model;
 
+import com.example.MTG_Mox.auth.TokenGenerator;
+import com.example.MTG_Mox.auth.TokenGeneratorUUID;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 import java.time.LocalDateTime;
 import java.util.Date;
-
+@Entity
 public class PasswordResetToken {
+    @Id
     private String email;
     private String token;
     private LocalDateTime expirationDate;
@@ -11,8 +17,10 @@ public class PasswordResetToken {
     public PasswordResetToken(){
 
     }
-    public PasswordResetToken(String token, String email) {
-        this.token = token;
+    public PasswordResetToken(String email) {
+        TokenGenerator tokenGenerator = new TokenGeneratorUUID();
+        tokenGenerator.createToken();
+        this.token = tokenGenerator.createToken();
         this.expirationDate = LocalDateTime.now();
         this.email = email;
     }
