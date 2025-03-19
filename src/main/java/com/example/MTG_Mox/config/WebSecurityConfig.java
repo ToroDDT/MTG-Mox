@@ -27,7 +27,7 @@ public class WebSecurityConfig {
         return http
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login.css","/h2-console/**","/main.css").permitAll()
+                        .requestMatchers("/login.css","/h2-console/**","/main.css", "/forgot-password").permitAll()
                         .anyRequest().authenticated()
 
                 )

@@ -1,4 +1,4 @@
-package com.example.MTG_Mox.model;
+package com.example.MTG_Mox.model.TCG;
 
 import java.util.List;
 

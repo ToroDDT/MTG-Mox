@@ -1,7 +1,5 @@
-package com.example.MTG_Mox.model;
+package com.example.MTG_Mox.model.TCG;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 import java.util.List;
