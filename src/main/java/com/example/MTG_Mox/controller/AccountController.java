@@ -76,4 +76,5 @@ public class AccountController {
         return "email-form"; // Show the form with success message
     }
 
+
 }
