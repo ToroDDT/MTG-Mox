@@ -1,15 +1,19 @@
 package com.example.MTG_Mox.api;
 
+import java.util.List;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import com.example.MTG_Mox.model.Catalog;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class ScryFallApiClientImpl implements ScryFallApiClient {
 
     @Override
-    public String searchCard(String card) throws IOException, InterruptedException {
+    public List<String> searchCard(String card) throws IOException, InterruptedException {
 
         // 1. Create an HttpClient
         HttpClient client = HttpClient.newHttpClient();
@@ -21,9 +25,12 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
                 .header("Accept", "application/json")
                 .header("User-Agent", "MTG-MOX-APP")
                 .build();
-
         // 3. Send the request and return the response body
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        return response.body();
+        ObjectMapper objectMapper = new ObjectMapper();
+        Catalog listOfCards = objectMapper.readValue(response.body(), Catalog.class);
+        // 4. check if the array is empty if the array is empty return an empty string
+        return listOfCards.getData();
     }
+
 }

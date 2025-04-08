@@ -16,20 +16,23 @@ import java.util.Set;
 @SpringBootApplication()
 public class MtgMoxApplication {
 
-
 	public static void main(String[] args) {
 		SpringApplication.run(MtgMoxApplication.class, args);
 	}
+
 	@Autowired
 	PasswordEncoder passwordEncoder;
+
 	@Bean
-	CommandLineRunner commandLineRunner(AccountRepository accountRepository){
+	CommandLineRunner commandLineRunner(AccountRepository accountRepository) {
 		Set<Role> roles = new HashSet<>();
 		Role role1 = new Role("USER");
 		roles.add(role1);
 		return args -> {
 
-			accountRepository.save(new User("Deltoro1999@icloud.com",passwordEncoder.encode("password123"),roles));
+			accountRepository.save(new User("Deltoro1999@icloud.com", passwordEncoder.encode("password123"),
+					roles));
 		};
+
 	}
 }

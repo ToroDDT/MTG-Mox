@@ -19,15 +19,16 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
     private final JpaUserDetailsService jpaUserDetailsService;
 
-    public WebSecurityConfig(JpaUserDetailsService jpaUserDetailsService){
+    public WebSecurityConfig(JpaUserDetailsService jpaUserDetailsService) {
         this.jpaUserDetailsService = jpaUserDetailsService;
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login.css","/h2-console/**","/main.css", "/forgot-password").permitAll()
+                        .requestMatchers("/login.css", "/h2-console/**", "/main.css", "/forgot-password").permitAll()
                         .anyRequest().authenticated()
 
                 )
@@ -35,11 +36,11 @@ public class WebSecurityConfig {
                 .headers(headers -> headers.frameOptions().sameOrigin())
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .permitAll()
-                )
+                        .permitAll())
 
                 .build();
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

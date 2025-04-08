@@ -28,6 +28,7 @@ import java.util.Optional;
 @Controller
 public class AccountController {
     private final PasswordResetService passwordResetService;
+
     @Autowired
     public AccountController(PasswordResetService passwordResetService) {
         this.passwordResetService = passwordResetService;
@@ -35,30 +36,36 @@ public class AccountController {
 
     @Autowired
     AccountService accountService;
-    @GetMapping("/")
-    public String index(){
-        return "home";
-    }
+
     @GetMapping("/home")
-    public String showHome(){
+    public String showHome() {
         return "home";
     }
 
+    @GetMapping(value = "/**/{path:[^\\.]*}")
+    public String forward() {
+        return "forward:/";
+    }
+
     @GetMapping("/login")
-    public String login(){
+    public String login() {
         return "login";
     }
+
     @PostMapping("/create-account")
-    public ResponseEntity<?> submitForm( @RequestBody @Valid User user, BindingResult result) {
+    public ResponseEntity<?> submitForm(@RequestBody @Valid User user, BindingResult result) {
         accountService.addUser(user);
         return ResponseEntity.ok(user);
     }
+
     @GetMapping("/forgot-password")
-    public String resetPasswordForm(){
+    public String resetPasswordForm() {
         return "email-form";
     }
+
     @PostMapping("/forgot-password")
-    public String sendEmailLinkToResetPassword(@RequestParam("email") String email, Model model) throws MessagingException, UnsupportedEncodingException, EmailDoesNotExistException {
+    public String sendEmailLinkToResetPassword(@RequestParam("email") String email, Model model)
+            throws MessagingException, UnsupportedEncodingException, EmailDoesNotExistException {
         EmailValidators emailValidator = new EmailValidatorJavaImpl(); // Consider injecting this via @Service
         boolean emailIsCorrect = emailValidator.validateEmail(email);
 
@@ -69,12 +76,11 @@ public class AccountController {
         try {
             boolean createdTokenSuccessfully = passwordResetService.addTokenToDatabase(email);
         } catch (Exception e) {
-                model.addAttribute("errorMessage", e.getMessage());
-                return "email-form";
+            model.addAttribute("errorMessage", e.getMessage());
+            return "email-form";
         }
         model.addAttribute("successMessage", "A password reset link has been sent to your email.");
         return "email-form"; // Show the form with success message
     }
-
 
 }
