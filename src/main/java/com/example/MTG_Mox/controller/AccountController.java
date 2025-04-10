@@ -2,6 +2,8 @@ package com.example.MTG_Mox.controller;
 
 import com.example.MTG_Mox.advice.EmailDoesNotExistException;
 import com.example.MTG_Mox.advice.UserAlreadyExistsException;
+import com.example.MTG_Mox.api.ScryFallApiClient;
+import com.example.MTG_Mox.api.ScryFallApiClientImpl;
 import com.example.MTG_Mox.model.User;
 import com.example.MTG_Mox.service.AccountService;
 import com.example.MTG_Mox.service.PasswordResetService;
@@ -22,8 +24,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.ArrayList;
 
 @Controller
 public class AccountController {
@@ -81,6 +85,22 @@ public class AccountController {
         }
         model.addAttribute("successMessage", "A password reset link has been sent to your email.");
         return "email-form"; // Show the form with success message
+    }
+
+    // EndPoints for React App
+    @GetMapping("/autocomplete")
+    public ResponseEntity<?> showAutocommplete(@RequestParam("card") String card) {
+        ScryFallApiClient scryFallApiClient = new ScryFallApiClientImpl();
+        List<String> cardList = new ArrayList<>();
+        try {
+            cardList = scryFallApiClient.searchCard(card);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        Map<String, List<String>> responseData = new HashMap<>();
+        responseData.put("data", cardList);
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
 }
