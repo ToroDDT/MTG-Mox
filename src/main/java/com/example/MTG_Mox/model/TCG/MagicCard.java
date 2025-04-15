@@ -1,13 +1,14 @@
 package com.example.MTG_Mox.model.TCG;
 
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
 import java.util.List;
 import java.util.Map;
-//@Entity
+
+@Entity
 public class MagicCard {
     @Id
-    private String id;
+    @GeneratedValue
+    private Long id;
     private String name;
     private String object;
     private String oracleId;
@@ -67,17 +68,31 @@ public class MagicCard {
     private Integer edhrecRank;
     private Integer pennyRank;
     private Map<String, String> prices;
-    public MagicCard(){
+
+    @ManyToOne
+    @JoinColumn(name = "commander_id")
+    private Commander commander;
+
+    public MagicCard() {
 
     }
-    public MagicCard(String id, String name, String object, String oracleId, List<Integer> multiverseIds, Integer mtgoId,
-                     Integer tcgplayerId, Integer cardmarketId, String lang, String releasedAt, String uri, String scryfallUri, String layout, boolean highresImage,
-                     String imageStatus, Map<String, String> imageUris, String manaCost, Integer cmc, String typeLine, String oracleText, List<String> colors, List<String> colorIdentity,
-                     List<String> keywords, Map<String, String> legalities, List<String> games, boolean reserved, boolean gameChanger, boolean foil, boolean nonfoil,
-                     List<String> finishes, boolean oversized, boolean promo, boolean reprint, boolean variation, String setId, String set, String setName, String setType, String setUri,
-                     String setSearchUri, String scryfallSetUri, String rulingsUri, String printsSearchUri, String collectorNumber, boolean digital, String rarity, String cardBackId, String artist,
-                     List<String> artistIds, String illustrationId, String borderColor, String frame, String securityStamp, boolean fullArt, boolean textless, boolean booster, boolean storySpotlight, Integer edhrecRank,
-                     Integer pennyRank, Map<String, String> prices, Map<String, String> relatedUris, Map<String, String> purchaseUris) {
+
+    public MagicCard(String id, String name, String object, String oracleId, List<Integer> multiverseIds,
+            Integer mtgoId,
+            Integer tcgplayerId, Integer cardmarketId, String lang, String releasedAt, String uri, String scryfallUri,
+            String layout, boolean highresImage,
+            String imageStatus, Map<String, String> imageUris, String manaCost, Integer cmc, String typeLine,
+            String oracleText, List<String> colors, List<String> colorIdentity,
+            List<String> keywords, Map<String, String> legalities, List<String> games, boolean reserved,
+            boolean gameChanger, boolean foil, boolean nonfoil,
+            List<String> finishes, boolean oversized, boolean promo, boolean reprint, boolean variation, String setId,
+            String set, String setName, String setType, String setUri,
+            String setSearchUri, String scryfallSetUri, String rulingsUri, String printsSearchUri,
+            String collectorNumber, boolean digital, String rarity, String cardBackId, String artist,
+            List<String> artistIds, String illustrationId, String borderColor, String frame, String securityStamp,
+            boolean fullArt, boolean textless, boolean booster, boolean storySpotlight, Integer edhrecRank,
+            Integer pennyRank, Map<String, String> prices, Map<String, String> relatedUris,
+            Map<String, String> purchaseUris) {
         this.id = id;
         this.name = name;
         this.object = object;

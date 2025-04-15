@@ -33,4 +33,9 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
         return listOfCards.getData();
     }
 
+    @Override
+    public void addCardToCommanderDeck(String card) {
+
+    }
+
 }
