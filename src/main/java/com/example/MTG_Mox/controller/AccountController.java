@@ -102,5 +102,4 @@ public class AccountController {
         responseData.put("data", cardList);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
-
 }

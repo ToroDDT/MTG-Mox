@@ -34,8 +34,7 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
     }
 
     @Override
-    public void addCardToCommanderDeck(String card) {
+    public void addCardToCommanderDeck(String card, String commander) {
 
     }
-
 }
