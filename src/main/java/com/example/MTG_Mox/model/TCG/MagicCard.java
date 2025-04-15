@@ -3,12 +3,14 @@ package com.example.MTG_Mox.model.TCG;
 import jakarta.persistence.*;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 @Entity
 public class MagicCard {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long identifier;
+    private String id;
     private String name;
     private String object;
     private String oracleId;
@@ -23,7 +25,6 @@ public class MagicCard {
     private String layout;
     private boolean highresImage;
     private String imageStatus;
-    private Map<String, String> imageUris;
     private String manaCost;
     private Integer cmc;
     private String typeLine;
@@ -31,7 +32,6 @@ public class MagicCard {
     private List<String> colors;
     private List<String> colorIdentity;
     private List<String> keywords;
-    private Map<String, String> legalities;
     private List<String> games;
     private boolean reserved;
     private boolean gameChanger;
@@ -67,8 +67,33 @@ public class MagicCard {
     private boolean storySpotlight;
     private Integer edhrecRank;
     private Integer pennyRank;
-    private Map<String, String> prices;
+    @ElementCollection
+    @CollectionTable(name = "magic_card_image_uris", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @MapKeyColumn(name = "uri_key")
+    @Column(name = "uri_value")
+    private Map<String, String> imageUris = new HashMap<>();
 
+    @ElementCollection
+    @CollectionTable(name = "magic_card_legalities", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @MapKeyColumn(name = "legality_key")
+    @Column(name = "legality_value")
+    private Map<String, String> legalities = new HashMap<>();
+
+    @ElementCollection
+    @CollectionTable(name = "magic_card_prices", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @MapKeyColumn(name = "price_key")
+    @Column(name = "price_value")
+    private Map<String, String> prices = new HashMap<>();
+
+    @ElementCollection
+    @CollectionTable(name = "card_related_uris", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "uri_value")
+    private Map<String, String> relatedUris = new HashMap<>();
+
+    @ElementCollection
+    @CollectionTable(name = "card_purchase_uris", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "uri_value")
+    private Map<String, String> purchaseUris = new HashMap<>();
     @ManyToOne
     @JoinColumn(name = "commander_id")
     private Commander commander;
@@ -156,9 +181,6 @@ public class MagicCard {
         this.relatedUris = relatedUris;
         this.purchaseUris = purchaseUris;
     }
-
-    private Map<String, String> relatedUris;
-    private Map<String, String> purchaseUris;
 
     // Getters and Setters for all the fields
 
