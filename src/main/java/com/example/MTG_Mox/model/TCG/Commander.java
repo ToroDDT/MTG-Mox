@@ -17,7 +17,7 @@ public class Commander {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "commander")
+    @OneToMany(mappedBy = "commander", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MagicCard> cards = new ArrayList<>();
 
     public Long getId() {
@@ -36,8 +36,19 @@ public class Commander {
         this.name = name;
     }
 
-    public void addMagicCard(MagicCard magicCard) {
-        this.cards.add(magicCard);
+    public void addCard(MagicCard magicCard) {
+        // create a new magic Card
+        MagicCard newMagicCard = magicCard;
+        // Set the commander that this card belongs to
+        newMagicCard.setCommander(this);
+        // add magic card to to Commander card list
+        cards.add(newMagicCard);
+
+    }
+
+    public void removeCard(MagicCard magicCard) {
+        cards.remove(magicCard);
+        magicCard.setCommander(null);
     }
 
     public List<MagicCard> getMagicCards() {
