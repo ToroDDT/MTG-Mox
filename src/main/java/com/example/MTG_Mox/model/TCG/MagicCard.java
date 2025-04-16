@@ -183,6 +183,15 @@ public class MagicCard {
     }
 
     // Getters and Setters for all the fields
+    //
+
+    public Commander getCommander() {
+        return commander;
+    }
+
+    public void setCommander(Commander commander) {
+        this.commander = commander;
+    }
 
     public String getObject() {
         return object;
