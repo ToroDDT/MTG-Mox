@@ -10,13 +10,17 @@ import com.example.MTG_Mox.repo.CommanderRepository;
 public class CommanderService {
     private final CommanderRepository commanderRepository;
 
+    public CommanderService(CommanderRepository commanderRepository) {
+        this.commanderRepository = commanderRepository;
+    }
+
     @Autowired
     public CommanderService(CommanderRepository commanderRepository) {
         this.commanderRepository = commanderRepository;
     }
 
-    public addCommander(String name){
-    Commander newCommander = new Commander(name);
+    public void addCommander(String name) {
+        Commander newCommander = new Commander(name);
         commanderRepository.save(newCommander);
     }
 }
