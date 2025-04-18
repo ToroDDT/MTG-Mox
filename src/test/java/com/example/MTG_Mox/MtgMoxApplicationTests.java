@@ -30,6 +30,7 @@ class MtgMoxApplicationTests {
 
     @InjectMocks
     private AccountService accountService;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -44,17 +45,19 @@ class MtgMoxApplicationTests {
     void contextLoads() throws Exception {
         assertThat(accountController).isNotNull();
     }
+
     @Test
-    void shouldCreateNewUser(){
+    void shouldCreateNewUser() {
         Set<Role> userSet = new HashSet<>();
         userSet.add(new Role("User"));
-        var test = new User( "Deltoro1999@icloud.com","password", userSet);
+        var test = new User("Deltoro1999@icloud.com", "password", userSet);
         assertThat(test).isNotNull();
         assertThat(test.getUsername()).isEqualTo("Deltoro1999@icloud.com");
         assertThat(test.getRoles()).contains(new Role("User"));
     }
+
     @Test
-    public void testValidUser(){
+    public void testValidUser() {
         User validUser = new User("valid.email@example.com", "validPassword");
         BeanPropertyBindingResult result = new BeanPropertyBindingResult(validUser, "user");
 
@@ -73,7 +76,7 @@ class MtgMoxApplicationTests {
     }
 
     @Test
-    public void TestNullFieldsUserObject(){
+    public void TestNullFieldsUserObject() {
         User invalidUser = new User(null, null);
         BeanPropertyBindingResult result = new BeanPropertyBindingResult(invalidUser, "user");
 
@@ -90,16 +93,20 @@ class MtgMoxApplicationTests {
         validator.validate(invalidUser, result);
 
         assertTrue(result.hasErrors());
-        assertEquals("Password must be at least 4 characters long.", result.getFieldError("password").getDefaultMessage());
+        assertEquals("Password must be at least 4 characters long.",
+                result.getFieldError("password").getDefaultMessage());
     }
 
     @Test
     public void testIfUserAlreadyExists() {
-        User userExists = new User("Deltoro1999@icloud.com", "validPassword");  // Changed from 'user' to 'userExists'
+        User userExists = new User("Deltoro1999@icloud.com", "validPassword"); // Changed from 'user' to 'userExists'
         User validUser = new User("valid.email@example.com", "validPassword");
 
-        // Mocking repository behavior: userExists already exists, validUser does not exist
-        when(accountRepository.findById(userExists.getUsername())).thenReturn(Optional.of(userExists));  // Changed from user to userExists
+        // Mocking repository behavior: userExists already exists, validUser does not
+        // exist
+        when(accountRepository.findById(userExists.getUsername())).thenReturn(Optional.of(userExists)); // Changed from
+                                                                                                        // user to
+                                                                                                        // userExists
         when(accountRepository.findById(validUser.getUsername())).thenReturn(Optional.empty());
         Optional<User> result = accountRepository.findById(userExists.getUsername());
 

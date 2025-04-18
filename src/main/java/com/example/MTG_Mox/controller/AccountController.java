@@ -21,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -32,10 +33,12 @@ import java.util.ArrayList;
 @Controller
 public class AccountController {
     private final PasswordResetService passwordResetService;
+    private final ScryFallApiClientImpl scryFallApiClientImpl;
 
     @Autowired
-    public AccountController(PasswordResetService passwordResetService) {
+    public AccountController(PasswordResetService passwordResetService, ScryFallApiClientImpl scryFallApiClientImpl) {
         this.passwordResetService = passwordResetService;
+        this.scryFallApiClientImpl = scryFallApiClientImpl;
     }
 
     @Autowired
@@ -90,10 +93,9 @@ public class AccountController {
     // EndPoints for React App
     @GetMapping("/autocomplete")
     public ResponseEntity<?> showAutocommplete(@RequestParam("card") String card) {
-        ScryFallApiClient scryFallApiClient = new ScryFallApiClientImpl();
         List<String> cardList = new ArrayList<>();
         try {
-            cardList = scryFallApiClient.searchCard(card);
+            cardList = scryFallApiClientImpl.searchCard(card);
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
@@ -101,5 +103,18 @@ public class AccountController {
         Map<String, List<String>> responseData = new HashMap<>();
         responseData.put("data", cardList);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+    @PostMapping("/addCardToCommmaderDeck")
+    public ResponseEntity<?> addCardToCommander(@RequestParam("card") String card,
+            @RequestParam("commander") String commander) {
+        try {
+            scryFallApiClientImpl.addCardToCommanderDeck(card, commander);
+        } catch (Exception e) {
+            // TODO: handle exception
+            //
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

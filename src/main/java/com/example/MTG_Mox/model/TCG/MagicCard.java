@@ -6,22 +6,35 @@ import java.util.Map;
 import java.util.HashMap;
 
 @Entity
+@Table(name = "magic_card")
 public class MagicCard {
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long identifier;
+
     private String id;
     private String name;
     private String object;
+
+    @Column(name = "oracle_id")
     private String oracleId;
+
+    @ElementCollection
+    @CollectionTable(name = "magic_card_multiverse_ids", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "multiverse_id")
     private List<Integer> multiverseIds;
+
     private Integer mtgoId;
     private Integer tcgplayerId;
     private Integer cardmarketId;
     private String lang;
     private String releasedAt;
     private String uri;
+
+    @Column(name = "scryfall_uri")
     private String scryfallUri;
+
     private String layout;
     private boolean highresImage;
     private String imageStatus;
@@ -29,21 +42,47 @@ public class MagicCard {
     private Integer cmc;
     private String typeLine;
     private String oracleText;
+
+    @ElementCollection
+    @CollectionTable(name = "magic_card_colors", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "color")
     private List<String> colors;
+
+    @ElementCollection
+    @CollectionTable(name = "magic_card_color_identity", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "color_identity")
     private List<String> colorIdentity;
+
+    @ElementCollection
+    @CollectionTable(name = "magic_card_keywords", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "keyword")
     private List<String> keywords;
+
+    @ElementCollection
+    @CollectionTable(name = "magic_card_games", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "game")
     private List<String> games;
+
     private boolean reserved;
     private boolean gameChanger;
     private boolean foil;
     private boolean nonfoil;
+
+    @ElementCollection
+    @CollectionTable(name = "magic_card_finishes", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "finish")
     private List<String> finishes;
+
     private boolean oversized;
     private boolean promo;
     private boolean reprint;
     private boolean variation;
+
     private String setId;
+
+    @Column(name = "\"set\"") // because 'set' is a reserved keyword
     private String set;
+
     private String setName;
     private String setType;
     private String setUri;
@@ -56,7 +95,12 @@ public class MagicCard {
     private String rarity;
     private String cardBackId;
     private String artist;
+
+    @ElementCollection
+    @CollectionTable(name = "magic_card_artist_ids", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "artist_id")
     private List<String> artistIds;
+
     private String illustrationId;
     private String borderColor;
     private String frame;
