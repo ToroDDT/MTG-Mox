@@ -1,48 +1,88 @@
 package com.example.MTG_Mox.model.TCG;
 
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
 import java.util.List;
 import java.util.Map;
-//@Entity
+import java.util.HashMap;
+
+@Entity
+@Table(name = "magic_card")
 public class MagicCard {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long identifier;
+
     private String id;
     private String name;
     private String object;
+
+    @Column(name = "oracle_id")
     private String oracleId;
+
+    @ElementCollection
+    @CollectionTable(name = "magic_card_multiverse_ids", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "multiverse_id")
     private List<Integer> multiverseIds;
+
     private Integer mtgoId;
     private Integer tcgplayerId;
     private Integer cardmarketId;
     private String lang;
     private String releasedAt;
     private String uri;
+
+    @Column(name = "scryfall_uri")
     private String scryfallUri;
+
     private String layout;
     private boolean highresImage;
     private String imageStatus;
-    private Map<String, String> imageUris;
     private String manaCost;
     private Integer cmc;
     private String typeLine;
     private String oracleText;
+
+    @ElementCollection
+    @CollectionTable(name = "magic_card_colors", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "color")
     private List<String> colors;
+
+    @ElementCollection
+    @CollectionTable(name = "magic_card_color_identity", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "color_identity")
     private List<String> colorIdentity;
+
+    @ElementCollection
+    @CollectionTable(name = "magic_card_keywords", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "keyword")
     private List<String> keywords;
-    private Map<String, String> legalities;
+
+    @ElementCollection
+    @CollectionTable(name = "magic_card_games", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "game")
     private List<String> games;
+
     private boolean reserved;
     private boolean gameChanger;
     private boolean foil;
     private boolean nonfoil;
+
+    @ElementCollection
+    @CollectionTable(name = "magic_card_finishes", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "finish")
     private List<String> finishes;
+
     private boolean oversized;
     private boolean promo;
     private boolean reprint;
     private boolean variation;
+
     private String setId;
+
+    @Column(name = "\"set\"") // because 'set' is a reserved keyword
     private String set;
+
     private String setName;
     private String setType;
     private String setUri;
@@ -55,7 +95,12 @@ public class MagicCard {
     private String rarity;
     private String cardBackId;
     private String artist;
+
+    @ElementCollection
+    @CollectionTable(name = "magic_card_artist_ids", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "artist_id")
     private List<String> artistIds;
+
     private String illustrationId;
     private String borderColor;
     private String frame;
@@ -66,18 +111,57 @@ public class MagicCard {
     private boolean storySpotlight;
     private Integer edhrecRank;
     private Integer pennyRank;
-    private Map<String, String> prices;
-    public MagicCard(){
+    @ElementCollection
+    @CollectionTable(name = "magic_card_image_uris", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @MapKeyColumn(name = "uri_key")
+    @Column(name = "uri_value")
+    private Map<String, String> imageUris = new HashMap<>();
+
+    @ElementCollection
+    @CollectionTable(name = "magic_card_legalities", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @MapKeyColumn(name = "legality_key")
+    @Column(name = "legality_value")
+    private Map<String, String> legalities = new HashMap<>();
+
+    @ElementCollection
+    @CollectionTable(name = "magic_card_prices", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @MapKeyColumn(name = "price_key")
+    @Column(name = "price_value")
+    private Map<String, String> prices = new HashMap<>();
+
+    @ElementCollection
+    @CollectionTable(name = "card_related_uris", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "uri_value")
+    private Map<String, String> relatedUris = new HashMap<>();
+
+    @ElementCollection
+    @CollectionTable(name = "card_purchase_uris", joinColumns = @JoinColumn(name = "magic_card_id"))
+    @Column(name = "uri_value")
+    private Map<String, String> purchaseUris = new HashMap<>();
+    @ManyToOne
+    @JoinColumn(name = "commander_id")
+    private Commander commander;
+
+    public MagicCard() {
 
     }
-    public MagicCard(String id, String name, String object, String oracleId, List<Integer> multiverseIds, Integer mtgoId,
-                     Integer tcgplayerId, Integer cardmarketId, String lang, String releasedAt, String uri, String scryfallUri, String layout, boolean highresImage,
-                     String imageStatus, Map<String, String> imageUris, String manaCost, Integer cmc, String typeLine, String oracleText, List<String> colors, List<String> colorIdentity,
-                     List<String> keywords, Map<String, String> legalities, List<String> games, boolean reserved, boolean gameChanger, boolean foil, boolean nonfoil,
-                     List<String> finishes, boolean oversized, boolean promo, boolean reprint, boolean variation, String setId, String set, String setName, String setType, String setUri,
-                     String setSearchUri, String scryfallSetUri, String rulingsUri, String printsSearchUri, String collectorNumber, boolean digital, String rarity, String cardBackId, String artist,
-                     List<String> artistIds, String illustrationId, String borderColor, String frame, String securityStamp, boolean fullArt, boolean textless, boolean booster, boolean storySpotlight, Integer edhrecRank,
-                     Integer pennyRank, Map<String, String> prices, Map<String, String> relatedUris, Map<String, String> purchaseUris) {
+
+    public MagicCard(String id, String name, String object, String oracleId, List<Integer> multiverseIds,
+            Integer mtgoId,
+            Integer tcgplayerId, Integer cardmarketId, String lang, String releasedAt, String uri, String scryfallUri,
+            String layout, boolean highresImage,
+            String imageStatus, Map<String, String> imageUris, String manaCost, Integer cmc, String typeLine,
+            String oracleText, List<String> colors, List<String> colorIdentity,
+            List<String> keywords, Map<String, String> legalities, List<String> games, boolean reserved,
+            boolean gameChanger, boolean foil, boolean nonfoil,
+            List<String> finishes, boolean oversized, boolean promo, boolean reprint, boolean variation, String setId,
+            String set, String setName, String setType, String setUri,
+            String setSearchUri, String scryfallSetUri, String rulingsUri, String printsSearchUri,
+            String collectorNumber, boolean digital, String rarity, String cardBackId, String artist,
+            List<String> artistIds, String illustrationId, String borderColor, String frame, String securityStamp,
+            boolean fullArt, boolean textless, boolean booster, boolean storySpotlight, Integer edhrecRank,
+            Integer pennyRank, Map<String, String> prices, Map<String, String> relatedUris,
+            Map<String, String> purchaseUris) {
         this.id = id;
         this.name = name;
         this.object = object;
@@ -142,10 +226,16 @@ public class MagicCard {
         this.purchaseUris = purchaseUris;
     }
 
-    private Map<String, String> relatedUris;
-    private Map<String, String> purchaseUris;
-
     // Getters and Setters for all the fields
+    //
+
+    public Commander getCommander() {
+        return commander;
+    }
+
+    public void setCommander(Commander commander) {
+        this.commander = commander;
+    }
 
     public String getObject() {
         return object;
