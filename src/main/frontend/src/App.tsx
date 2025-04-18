@@ -6,11 +6,16 @@ type autoCompleteList = {
 function App() {
   const [input, setInput] = useState("");
   const [cards, setCards] = useState<string[]>([]);
-  const [card, setCard] = useState<string>("");
+  const [cardSelected, setCardSelected] = useState<string>("")
+  useEffect(() => {
+    fetch((`http://localhost:8080/add-card?card=${encodeURIComponent(cardSelected)}`), {
+      method: "POST",
+    })
+  }, [cardSelected]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      fetch(`http://localhost:8080/autocomplete?card=${encodeURIComponent(card)}`, {
+      fetch(`http://localhost:8080/autocomplete?card=${encodeURIComponent(input)}`, {
         method: "GET",
       })
         .then((response) => response.json() as Promise<autoCompleteList>)
@@ -33,14 +38,13 @@ function App() {
 
   const cardList = cards.map((card, index) => (
     <li key={index}>
-      <button onClick={() => setCard(card)}>{card}</button>
+      <button onClick={() => setCardSelected(card)}>{card}</button>
     </li>
   ));
 
   return (
     <>
       <div>
-        HELLO
         <div>
           <input
             type="text"
