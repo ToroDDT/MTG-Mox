@@ -109,6 +109,7 @@ public class AccountController {
     public ResponseEntity<?> addCardToCommander(@RequestParam("card") String card,
             @RequestParam("commander") String commander) {
         try {
+            System.out.println("working as planned");
             scryFallApiClientImpl.addCardToCommanderDeck(card, commander);
         } catch (Exception e) {
             // TODO: handle exception

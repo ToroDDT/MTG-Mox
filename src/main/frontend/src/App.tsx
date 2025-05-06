@@ -1,66 +1,28 @@
-import { useState, useEffect } from 'react'
-type autoCompleteList = {
-  data: string[];
-};
-
+import { useState, useEffect } from "react";
+import Profile from "./Profile";
+import Nav from "./Nav";
+import AutoComplete from "./AutoComplete";
 function App() {
-  const [input, setInput] = useState("");
-  const [cards, setCards] = useState<string[]>([]);
-  const [cardSelected, setCardSelected] = useState<string>("")
-  useEffect(() => {
-    fetch((`http://localhost:8080/add-card?card=${encodeURIComponent(cardSelected)}`), {
-      method: "POST",
-    })
-  }, [cardSelected]);
+  const [commander, setCommander] = useState<string>("Necrobloom");
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      fetch(`http://localhost:8080/autocomplete?card=${encodeURIComponent(input)}`, {
-        method: "GET",
+    // Make the HTTP request when the component mounts
+    fetch('http://localhost:8080/getCommander')
+      .then((res) => res.json())
+      .then((data) => {
+        setCommander(data.commander);
       })
-        .then((response) => response.json() as Promise<autoCompleteList>)
-        .then((cardList) => {
-          if (cardList.data.length === 0) {
-            setCards(["no cards found..."]);
-          } else {
-            setCards(cardList.data);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        });
-    }, 1000); // Waits 1s after last keystroke
-
-    return () => {
-      clearTimeout(timeout); // cancel timeout if input changes
-    };
-  }, [input]);
-
-  const cardList = cards.map((card, index) => (
-    <li key={index}>
-      <button onClick={() => setCardSelected(card)}>{card}</button>
-    </li>
-  ));
-
+      .catch((error) => {
+        console.error('Error fetching users:', error);
+      });
+  }, []); // <-- empty array = run only once when the component mounts
   return (
     <>
-      <div>
-        <div>
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => {
-              setInput(e.target.value);
-            }}
-          />
-        </div>
-        <div>{card}</div>
-        <div>
-          <ul>{cardList}</ul>
-        </div>
-      </div>
+      <Nav />
+      <Profile commander={commander} />
+      <AutoComplete />
     </>
-  );
+  )
 }
 
 export default App;
