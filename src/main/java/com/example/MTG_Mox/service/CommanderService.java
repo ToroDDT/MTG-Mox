@@ -1,5 +1,7 @@
 package com.example.MTG_Mox.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 
@@ -17,7 +19,12 @@ public class CommanderService {
     }
 
     public void addCommander(String name) {
-        Commander newCommander = new Commander(name);
+        Commander newCommander = new Commander(name, true);
         commanderRepository.save(newCommander);
+    }
+
+    public String getCurrentCommander() {
+        Optional<Commander> getCurrentCommander = commanderRepository.findByCurrentTrue();
+        return getCurrentCommander.get().getName();
     }
 }

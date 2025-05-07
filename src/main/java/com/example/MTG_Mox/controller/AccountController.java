@@ -5,7 +5,9 @@ import com.example.MTG_Mox.advice.UserAlreadyExistsException;
 import com.example.MTG_Mox.api.ScryFallApiClient;
 import com.example.MTG_Mox.api.ScryFallApiClientImpl;
 import com.example.MTG_Mox.model.User;
+import com.example.MTG_Mox.model.TCG.Commander;
 import com.example.MTG_Mox.service.AccountService;
+import com.example.MTG_Mox.service.CommanderService;
 import com.example.MTG_Mox.service.PasswordResetService;
 import com.example.MTG_Mox.validate.EmailValidatorJavaImpl;
 import com.example.MTG_Mox.validate.EmailValidators;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,11 +37,14 @@ import java.util.ArrayList;
 public class AccountController {
     private final PasswordResetService passwordResetService;
     private final ScryFallApiClientImpl scryFallApiClientImpl;
+    private final CommanderService commanderService;
 
     @Autowired
-    public AccountController(PasswordResetService passwordResetService, ScryFallApiClientImpl scryFallApiClientImpl) {
+    public AccountController(PasswordResetService passwordResetService, ScryFallApiClientImpl scryFallApiClientImpl,
+            CommanderService commanderService) {
         this.passwordResetService = passwordResetService;
         this.scryFallApiClientImpl = scryFallApiClientImpl;
+        this.commanderService = commanderService;
     }
 
     @Autowired
@@ -109,7 +115,6 @@ public class AccountController {
     public ResponseEntity<?> addCardToCommander(@RequestParam("card") String card,
             @RequestParam("commander") String commander) {
         try {
-            System.out.println("working as planned");
             scryFallApiClientImpl.addCardToCommanderDeck(card, commander);
         } catch (Exception e) {
             // TODO: handle exception
@@ -117,5 +122,23 @@ public class AccountController {
             e.printStackTrace();
         }
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<?> getProfile(Principal principal) {
+        var userName = principal.getName();
+        String currentCommander = "";
+        try {
+            currentCommander = commanderService.getCurrentCommander();
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        Map<String, String> responseData = new HashMap<>();
+        responseData.put("userName", userName);
+        responseData.put("commander", currentCommander);
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+
     }
 }
