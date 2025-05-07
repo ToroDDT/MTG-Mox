@@ -12,13 +12,27 @@ public class Commander {
     @GeneratedValue
     private Long id;
     private String name;
+    private Boolean current;
 
-    public Commander(String name) {
+    public Commander() {
+
+    }
+
+    public Commander(String name, Boolean current) {
         this.name = name;
+        this.current = current;
     }
 
     @OneToMany(mappedBy = "commander", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MagicCard> cards = new ArrayList<>();
+
+    public Boolean getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(Boolean current) {
+        this.current = current;
+    }
 
     public Long getId() {
         return id;
