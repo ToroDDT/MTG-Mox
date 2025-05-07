@@ -28,7 +28,7 @@ function AutoComplete() {
         .then((response) => response.json() as Promise<autoCompleteList>)
         .then((cardList) => {
           if (cardList.data.length === 0) {
-            setCards(["no cards found..."]);
+            return
           } else {
             setCards(cardList.data);
           }
@@ -84,26 +84,30 @@ function AutoComplete() {
             width: '100%',
             maxWidth: 250,
             bgcolor: 'background.paper',
-            maxHeight: 300,
+            maxHeight: 200,
             overflowY: 'auto', // makes it scrollable vertically
             borderRadius: 1,
             boxShadow: 1,
+            position: 'absolute'
           }}
         >
-          <List component="nav" aria-label="secondary mailbox folder">
-            {cards.map((card, index) => (
-              <ListItemButton
-                key={index}
-                selected={selectedIndex === index}
-                onClick={() => {
-                  setSelectedIndex(index);
-                  setCardSelected(card);
-                }}
-              >
-                <ListItemText primary={card} />
-              </ListItemButton>
-            ))}
-          </List>
+          {cards.length > 0 ? (
+            <List component="nav" aria-label="secondary mailbox folder">
+              {cards.map((card, index) => (
+                <ListItemButton
+                  key={index}
+                  sx={{ py: 0.5, px: 1 }}
+                  selected={selectedIndex === index}
+                  onClick={() => {
+                    setSelectedIndex(index);
+                    setCardSelected(card);
+                  }}
+                >
+                  <ListItemText primary={card} primaryTypographyProps={{ fontSize: '0.4' }} />
+                </ListItemButton>
+              ))}
+            </List>
+          ) : null}
         </Box>
       </div>
     </>
