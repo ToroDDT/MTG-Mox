@@ -4,13 +4,15 @@ import Nav from "./Nav";
 import AutoComplete from "./AutoComplete";
 function App() {
   const [commander, setCommander] = useState<string>("Necrobloom");
+  const [name, setName] = useState("")
 
   useEffect(() => {
     // Make the HTTP request when the component mounts
-    fetch('http://localhost:8080/getCommander')
+    fetch('http://localhost:8080/user')
       .then((res) => res.json())
       .then((data) => {
         setCommander(data.commander);
+        setName(data.userName)
       })
       .catch((error) => {
         console.error('Error fetching users:', error);
@@ -19,7 +21,7 @@ function App() {
   return (
     <>
       <Nav />
-      <Profile commander={commander} />
+      <Profile commander={commander} name={name} />
       <AutoComplete />
     </>
   )
