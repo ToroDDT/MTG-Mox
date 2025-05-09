@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Profile from "./Profile";
 import Nav from "./Nav";
 import AutoComplete from "./AutoComplete";
+import AdvanceSearch from "./AdvanceSearch";
 function App() {
   const [commander, setCommander] = useState<string>("Necrobloom");
   const [name, setName] = useState("")
@@ -23,6 +24,7 @@ function App() {
       <Nav />
       <Profile commander={commander} name={name} />
       <AutoComplete />
+      <AdvanceSearch />
     </>
   )
 }
