@@ -43,7 +43,7 @@ public class MtgMoxApplication {
 	@Bean
 	CommandLineRunner commandLineRunnerDatabase(CommanderRepository commanderRepository) {
 		// Create a new Commander
-		Commander newCommander = new Commander("necrobloom");
+		Commander newCommander = new Commander("necrobloom", true);
 
 		// Create a new card to add
 		MagicCard magicCard = new MagicCard();
