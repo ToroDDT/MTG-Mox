@@ -4,6 +4,7 @@ import com.example.MTG_Mox.advice.EmailDoesNotExistException;
 import com.example.MTG_Mox.advice.UserAlreadyExistsException;
 import com.example.MTG_Mox.api.ScryFallApiClient;
 import com.example.MTG_Mox.api.ScryFallApiClientImpl;
+import com.example.MTG_Mox.model.Search;
 import com.example.MTG_Mox.model.User;
 import com.example.MTG_Mox.model.TCG.Commander;
 import com.example.MTG_Mox.service.AccountService;
@@ -139,6 +140,10 @@ public class AccountController {
         responseData.put("commander", currentCommander);
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+    @PostMapping("/advance-search")
+    public ResponseEntity<?> advanceSearchScryFallApi(@RequestBody Search search) {
 
     }
 }

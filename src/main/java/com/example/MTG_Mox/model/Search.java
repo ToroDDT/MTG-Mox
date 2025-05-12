@@ -7,7 +7,7 @@ public class Search {
     private String relativeToughness;
     private String set;
     private String card_type;
-    private String[] colors_identity;
+    private String colors_identity;
     private Integer mana_vale;
     private Integer power;
     private Integer toughness;
@@ -56,11 +56,11 @@ public class Search {
         this.card_type = card_type;
     }
 
-    public String[] getColors_identity() {
+    public String getColors_identity() {
         return colors_identity;
     }
 
-    public void setColors_identity(String[] colors_identity) {
+    public void setColors_identity(String colors_identity) {
         this.colors_identity = colors_identity;
     }
 
