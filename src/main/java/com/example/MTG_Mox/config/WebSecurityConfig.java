@@ -1,4 +1,3 @@
-
 package com.example.MTG_Mox.config;
 
 import com.example.MTG_Mox.service.JpaUserDetailsService;
@@ -6,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,6 +32,7 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated()
 
                 )
+                .csrf(AbstractHttpConfigurer::disable)
                 .userDetailsService(jpaUserDetailsService)
                 .headers(headers -> headers.frameOptions().sameOrigin())
                 .formLogin(form -> form

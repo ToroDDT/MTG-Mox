@@ -1,7 +1,6 @@
 package com.example.MTG_Mox.api;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Io;
 import org.springframework.stereotype.Component;
@@ -14,6 +13,7 @@ import java.net.http.HttpResponse;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.example.MTG_Mox.model.AdvanceSearchCatalog;
 import com.example.MTG_Mox.model.Catalog;
 import com.example.MTG_Mox.model.Search;
 import com.example.MTG_Mox.model.TCG.MagicCard;
@@ -51,7 +51,6 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
 
     @Override
     public List<String> searchCard(String card) throws IOException, InterruptedException {
-
         // 1. Create an HttpClient
         HttpClient client = HttpClient.newHttpClient();
 
@@ -91,68 +90,57 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
     }
 
     @Override
-    public List<String> advanceSearch(Search searchParameter) throws IOException, InterruptedException {
+    public List<MagicCard> advanceSearch(Search searchParameter) throws IOException, InterruptedException {
+
         // Url builder
         UriComponentsBuilder urlBuilder = UriComponentsBuilder.fromUriString("https://api.scryfall.com/cards/search");
         StringBuilder stringBuilder = new StringBuilder("");
-        // check for power
-        if (searchParameter.getPower() != null) {
-            if (!checkIfStringIsEmpty(stringBuilder)) {
+
+        if (searchParameter.getPower() != null && searchParameter.getRelativePower() != null) {
+            if (!checkIfStringIsEmpty(stringBuilder))
                 stringBuilder.append("+");
-            }
-            if (searchParameter.getRelativePower().equals("Greater than")) {
-                stringBuilder.append("pow>").append(searchParameter.getPower());
-            } else if (searchParameter.getRelativePower() == "Equal to") {
-                stringBuilder.append("pow=").append(searchParameter.getPower());
-            } else if (searchParameter.getRelativePower() == "Less than") {
-                stringBuilder.append("pow<").append(searchParameter.getPower());
+
+            switch (searchParameter.getRelativePower()) {
+                case "Greater than" -> stringBuilder.append("pow>").append(searchParameter.getPower());
+                case "Equal to" -> stringBuilder.append("pow=").append(searchParameter.getPower());
+                case "Less than" -> stringBuilder.append("pow<").append(searchParameter.getPower());
             }
         }
-        // get toughness
-        if (searchParameter.getToughness() != null)
 
-            if (!checkIfStringIsEmpty(stringBuilder)) {
+        if (searchParameter.getToughness() != null && searchParameter.getRelativeToughness() != null) {
+            if (!checkIfStringIsEmpty(stringBuilder))
                 stringBuilder.append("+");
+
+            switch (searchParameter.getRelativeToughness()) {
+                case "Greater than" -> stringBuilder.append("tou>").append(searchParameter.getToughness());
+                case "Equal to" -> stringBuilder.append("tou=").append(searchParameter.getToughness());
+                case "Less than" -> stringBuilder.append("tou<").append(searchParameter.getToughness());
             }
-
-        if (searchParameter.getRelativeToughness() == "Greater than") {
-            stringBuilder.append("tou>").append(searchParameter.getToughness());
-
-        } else if (searchParameter.getRelativeToughness() == "Equal to") {
-            stringBuilder.append("tou=").append(searchParameter.getToughness());
-        } else if (searchParameter.getRelativeToughness() == "Less than") {
-            stringBuilder.append("tou<").append(searchParameter.getToughness());
         }
 
-        if (searchParameter.getSet() != "") {
-            if (!checkIfStringIsEmpty(stringBuilder)) {
+        if (searchParameter.getSet() != null && !searchParameter.getSet().isEmpty()) {
+            if (!checkIfStringIsEmpty(stringBuilder))
                 stringBuilder.append("+");
-            }
-
             stringBuilder.append("set:").append(searchParameter.getSet());
         }
-        if (searchParameter.getName() != "") {
-            if (!checkIfStringIsEmpty(stringBuilder)) {
-                stringBuilder.append("+");
-            }
 
+        if (searchParameter.getName() != null && !searchParameter.getName().isEmpty()) {
+            if (!checkIfStringIsEmpty(stringBuilder))
+                stringBuilder.append("+");
             stringBuilder.append("name://").append(searchParameter.getName()).append("/");
         }
-        if (searchParameter.getCard_type() != "") {
-            if (!checkIfStringIsEmpty(stringBuilder)) {
-                stringBuilder.append("+");
-            }
 
+        if (searchParameter.getCard_type() != null && !searchParameter.getCard_type().isEmpty()) {
+            if (!checkIfStringIsEmpty(stringBuilder))
+                stringBuilder.append("+");
             stringBuilder.append("t:").append(searchParameter.getCard_type());
         }
-        if (searchParameter.getColors_identity() != "") {
-            if (!checkIfStringIsEmpty(stringBuilder)) {
-                stringBuilder.append("+");
-            }
 
+        if (searchParameter.getColors_identity() != null && !searchParameter.getColors_identity().isEmpty()) {
+            if (!checkIfStringIsEmpty(stringBuilder))
+                stringBuilder.append("+");
             stringBuilder.append("id:").append(searchParameter.getColors_identity());
         }
-
         String finalUrl = urlBuilder.queryParam("q", stringBuilder.toString()).toUriString();
 
         HttpClient client = HttpClient.newHttpClient();
@@ -167,8 +155,9 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
         // 3. Send the request and return the response body
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         ObjectMapper objectMapper = new ObjectMapper();
-        Catalog listOfCards = objectMapper.readValue(response.body(), Catalog.class);
+        AdvanceSearchCatalog listOfCards = objectMapper.readValue(response.body(), AdvanceSearchCatalog.class);
 
         return listOfCards.getData();
+
     }
 }

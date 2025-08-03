@@ -7,6 +7,7 @@ import com.example.MTG_Mox.api.ScryFallApiClientImpl;
 import com.example.MTG_Mox.model.Search;
 import com.example.MTG_Mox.model.User;
 import com.example.MTG_Mox.model.TCG.Commander;
+import com.example.MTG_Mox.model.TCG.MagicCard;
 import com.example.MTG_Mox.service.AccountService;
 import com.example.MTG_Mox.service.CommanderService;
 import com.example.MTG_Mox.service.PasswordResetService;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 
 @Controller
 public class AccountController {
+
     private final PasswordResetService passwordResetService;
     private final ScryFallApiClientImpl scryFallApiClientImpl;
     private final CommanderService commanderService;
@@ -144,6 +146,16 @@ public class AccountController {
 
     @PostMapping("/advance-search")
     public ResponseEntity<?> advanceSearchScryFallApi(@RequestBody Search search) {
-
+        // Create a List for cards
+        List<MagicCard> listOfCards = new ArrayList<>();
+        try {
+            listOfCards = scryFallApiClientImpl.advanceSearch(search);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        Map<String, List<MagicCard>> responseData = new HashMap<>();
+        responseData.put("data", listOfCards);
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 }

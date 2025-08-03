@@ -79,9 +79,11 @@ function AdvanceSearch() {
 
   const [open, setOpen] = useState(false)
   async function sendForm() {
+    console.log("Form Submitted");
     try {
-      const response = await fetch("http://localhost:8080/advanceSearch", {
+      const response = await fetch("http://localhost:8080/advance-search", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -103,7 +105,7 @@ function AdvanceSearch() {
   return (
     <>
       <Button variant="outlined" onClick={() => setOpen(true)}>
-        Open Search Modal
+        Advance Search
       </Button>
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
         <DialogTitle>Advanced Search</DialogTitle>
@@ -140,7 +142,7 @@ function AdvanceSearch() {
               <Select
                 labelId="Color-Identity"
                 id="Color-Identity"
-                value={state.relativePower}
+                value={state.colors_identity}
                 label="power"
                 className="mr-2"
                 onChange={(e) =>
@@ -230,7 +232,7 @@ function AdvanceSearch() {
                 fullWidth
                 label="Power"
                 type="string"
-                value={state.card_type}
+                value={state.power}
                 onChange={(e) =>
                   dispatch({
                     type: ACTIONS.SET_POWER,
@@ -272,14 +274,14 @@ function AdvanceSearch() {
                 }
               />
             </div>
+            <DialogActions>
+              <Button onClick={() => setOpen(false)}>Cancel</Button>
+              <Button type="submit" variant="contained" onClick={() => setOpen(false)}>
+                Search
+              </Button>
+            </DialogActions>
           </form>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button type="submit" variant="contained" onClick={() => setOpen(false)}>
-            Search
-          </Button>
-        </DialogActions>
       </Dialog>
     </>
   )
