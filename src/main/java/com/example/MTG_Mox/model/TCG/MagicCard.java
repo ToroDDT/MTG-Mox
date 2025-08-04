@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "magic_card")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MagicCard {
 
     @Id

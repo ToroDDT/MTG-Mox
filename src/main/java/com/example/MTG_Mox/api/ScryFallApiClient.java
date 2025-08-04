@@ -8,6 +8,7 @@ import com.example.MTG_Mox.model.TCG.MagicCard;
 import java.io.IOException;
 
 public interface ScryFallApiClient {
+
     public List<String> searchCard(String card) throws IOException, InterruptedException;
 
     public Boolean addCardToCommanderDeck(String card, String commander) throws IOException, InterruptedException;
