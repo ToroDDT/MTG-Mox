@@ -23,8 +23,10 @@ function App() {
     <>
       <Nav />
       <Profile commander={commander} name={name} />
-      <AutoComplete />
-      <AdvanceSearch />
+      <div className="flex flex-col text-left">
+        <AutoComplete />
+        <AdvanceSearch />
+      </div>
     </>
   )
 }

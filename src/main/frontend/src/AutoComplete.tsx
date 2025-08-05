@@ -55,13 +55,17 @@ function AutoComplete() {
             }}
             size="small"
             sx={{
-              mt: 2,
-              mb: 1,
+              mt: 1,
+              ml: 1,
+              '& input::placeholder': {
+                fontSize: '0.8rem',  // Smaller placeholder text
+                color: 'black'        // Optional: custom color
+              },
+              fontSize: '0.7rem', // Make text smaller
               backgroundColor: 'white',
               borderRadius: 2,
-              boxShadow: 1,
               input: {
-                padding: '7px',
+                padding: '4px',
               },
               '& .MuiOutlinedInput-root': {
                 '& fieldset': {

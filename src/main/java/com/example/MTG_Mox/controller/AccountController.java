@@ -1,6 +1,9 @@
 package com.example.MTG_Mox.controller;
 
+import com.example.MTG_Mox.advice.CardDoesNotExistException;
 import com.example.MTG_Mox.advice.EmailDoesNotExistException;
+import com.example.MTG_Mox.advice.ErrorDetails;
+import com.example.MTG_Mox.advice.InvalidCommanderCardException;
 import com.example.MTG_Mox.advice.UserAlreadyExistsException;
 import com.example.MTG_Mox.api.ScryFallApiClient;
 import com.example.MTG_Mox.api.ScryFallApiClientImpl;
@@ -15,6 +18,8 @@ import com.example.MTG_Mox.validate.EmailValidatorJavaImpl;
 import com.example.MTG_Mox.validate.EmailValidators;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+
+import org.apache.logging.log4j.message.ReusableObjectMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
@@ -27,6 +32,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.HashMap;
@@ -105,9 +111,15 @@ public class AccountController {
         List<String> cardList = new ArrayList<>();
         try {
             cardList = scryFallApiClientImpl.searchCard(card);
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
+        } catch (CardDoesNotExistException e) {
+            ErrorDetails errorDetails = new ErrorDetails();
+            errorDetails.setMessage("Card does not exist in scryfall api...");
+            return ResponseEntity
+                    .badRequest()
+                    .body(errorDetails);
+
+        } catch (InterruptedException | IOException exception) {
+            exception.printStackTrace();
         }
         Map<String, List<String>> responseData = new HashMap<>();
         responseData.put("data", cardList);
@@ -119,10 +131,15 @@ public class AccountController {
             @RequestParam("commander") String commander) {
         try {
             scryFallApiClientImpl.addCardToCommanderDeck(card, commander);
-        } catch (Exception e) {
-            // TODO: handle exception
-            //
+
+        } catch (IOException | InterruptedException e) {
+
             e.printStackTrace();
+
+        } catch (InvalidCommanderCardException exception) {
+            ErrorDetails errorDetails = new ErrorDetails();
+            errorDetails.setMessage("Commander or Card fields are empty...");
+            return ResponseEntity.badRequest().body(errorDetails);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -104,7 +104,15 @@ function AdvanceSearch() {
   }
   return (
     <>
-      <Button variant="outlined" onClick={() => setOpen(true)}>
+      <Button sx={{
+        border: 'none',
+        width: 'fit-content',
+        color: 'purple',     // Purple text
+        fontSize: '0.7rem',  // Smaller text
+        minWidth: 'auto',    // Let it shrink
+        lineHeight: 1,
+        textTransform: 'none' // Prevent all caps if undesired
+      }} variant="outlined" onClick={() => setOpen(true)}>
         Advance Search
       </Button>
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">

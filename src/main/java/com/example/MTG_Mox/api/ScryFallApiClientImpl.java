@@ -14,6 +14,10 @@ import java.net.http.HttpResponse;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.smartcardio.Card;
+
+import com.example.MTG_Mox.advice.CardDoesNotExistException;
+import com.example.MTG_Mox.advice.InvalidCommanderCardException;
 import com.example.MTG_Mox.model.AdvanceSearchCatalog;
 import com.example.MTG_Mox.model.Catalog;
 import com.example.MTG_Mox.model.Search;
@@ -23,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class ScryFallApiClientImpl implements ScryFallApiClient {
+
     private final CommanderService commanderService;
 
     @Autowired
@@ -51,7 +56,10 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
     }
 
     @Override
-    public List<String> searchCard(String card) throws IOException, InterruptedException {
+    public List<String> searchCard(String card) throws IOException, InterruptedException, CardDoesNotExistException {
+        if (card.isEmpty()) {
+            throw new CardDoesNotExistException();
+        }
         // 1. Create an HttpClient
         HttpClient client = HttpClient.newHttpClient();
 
@@ -71,7 +79,11 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
     }
 
     @Override
-    public Boolean addCardToCommanderDeck(String card, String commander) throws IOException, InterruptedException {
+    public Boolean addCardToCommanderDeck(String card, String commander)
+            throws IOException, InterruptedException, InvalidCommanderCardException {
+        if (card.isEmpty() || commander.isEmpty()) {
+            throw new InvalidCommanderCardException();
+        }
         Boolean addedCommander = false;
         // 1. Create an HttpClient
         HttpClient client = HttpClient.newHttpClient();
