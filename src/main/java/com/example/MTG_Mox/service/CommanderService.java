@@ -11,20 +11,25 @@ import com.example.MTG_Mox.repo.CommanderRepository;
 
 @Service
 public class CommanderService {
-    private final CommanderRepository commanderRepository;
+	private final CommanderRepository commanderRepository;
 
-    @Autowired
-    public CommanderService(CommanderRepository commanderRepository) {
-        this.commanderRepository = commanderRepository;
-    }
+	@Autowired
+	public CommanderService(CommanderRepository commanderRepository) {
+		this.commanderRepository = commanderRepository;
+	}
 
-    public void addCommander(String name) {
-        Commander newCommander = new Commander(name, true);
-        commanderRepository.save(newCommander);
-    }
+	public void addCommander(String name) {
+		Commander newCommander = new Commander(name, true);
+		commanderRepository.save(newCommander);
+	}
 
-    public String getCurrentCommander() {
-        Optional<Commander> getCurrentCommander = commanderRepository.findByCurrentTrue();
-        return getCurrentCommander.get().getName();
-    }
+	public String getCurrentCommander() {
+		Optional<Commander> currentCommander = commanderRepository.findByCurrentTrue();
+		return currentCommander.get().getName();
+	}
+
+	public Optional<Commander> getCurrentCommanderDeck() {
+		Optional<Commander> commander = commanderRepository.findByCurrentTrue();
+		return commander;
+	}
 }
