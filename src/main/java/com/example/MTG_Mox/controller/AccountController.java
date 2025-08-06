@@ -23,6 +23,7 @@ import org.apache.logging.log4j.message.ReusableObjectMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +35,7 @@ import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.StackWalker.Option;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -44,135 +46,146 @@ import java.util.ArrayList;
 @Controller
 public class AccountController {
 
-    private final PasswordResetService passwordResetService;
-    private final ScryFallApiClientImpl scryFallApiClientImpl;
-    private final CommanderService commanderService;
+	private final PasswordResetService passwordResetService;
+	private final ScryFallApiClientImpl scryFallApiClientImpl;
+	private final CommanderService commanderService;
 
-    @Autowired
-    public AccountController(PasswordResetService passwordResetService, ScryFallApiClientImpl scryFallApiClientImpl,
-            CommanderService commanderService) {
-        this.passwordResetService = passwordResetService;
-        this.scryFallApiClientImpl = scryFallApiClientImpl;
-        this.commanderService = commanderService;
-    }
+	@Autowired
+	public AccountController(PasswordResetService passwordResetService, ScryFallApiClientImpl scryFallApiClientImpl,
+			CommanderService commanderService) {
+		this.passwordResetService = passwordResetService;
+		this.scryFallApiClientImpl = scryFallApiClientImpl;
+		this.commanderService = commanderService;
+	}
 
-    @Autowired
-    AccountService accountService;
+	@Autowired
+	AccountService accountService;
 
-    @GetMapping("/home")
-    public String showHome() {
-        return "home";
-    }
+	@GetMapping("/home")
+	public String showHome() {
+		return "home";
+	}
 
-    @GetMapping(value = "/**/{path:[^\\.]*}")
-    public String forward() {
-        return "forward:/";
-    }
+	@GetMapping(value = "/**/{path:[^\\.]*}")
+	public String forward() {
+		return "forward:/";
+	}
 
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
+	@GetMapping("/login")
+	public String login() {
+		return "login";
+	}
 
-    @PostMapping("/create-account")
-    public ResponseEntity<?> submitForm(@RequestBody @Valid User user, BindingResult result) {
-        accountService.addUser(user);
-        return ResponseEntity.ok(user);
-    }
+	@PostMapping("/create-account")
+	public ResponseEntity<?> submitForm(@RequestBody @Valid User user, BindingResult result) {
+		accountService.addUser(user);
+		return ResponseEntity.ok(user);
+	}
 
-    @GetMapping("/forgot-password")
-    public String resetPasswordForm() {
-        return "email-form";
-    }
+	@GetMapping("/forgot-password")
+	public String resetPasswordForm() {
+		return "email-form";
+	}
 
-    @PostMapping("/forgot-password")
-    public String sendEmailLinkToResetPassword(@RequestParam("email") String email, Model model)
-            throws MessagingException, UnsupportedEncodingException, EmailDoesNotExistException {
-        EmailValidators emailValidator = new EmailValidatorJavaImpl(); // Consider injecting this via @Service
-        boolean emailIsCorrect = emailValidator.validateEmail(email);
+	@PostMapping("/forgot-password")
+	public String sendEmailLinkToResetPassword(@RequestParam("email") String email, Model model)
+			throws MessagingException, UnsupportedEncodingException, EmailDoesNotExistException {
+		EmailValidators emailValidator = new EmailValidatorJavaImpl(); // Consider injecting this via @Service
+		boolean emailIsCorrect = emailValidator.validateEmail(email);
 
-        if (!emailIsCorrect) {
-            model.addAttribute("errorMessage", "Invalid email format. Please enter a valid email.");
-            return "email-form"; // Return the form with an error message
-        }
-        try {
-            boolean createdTokenSuccessfully = passwordResetService.addTokenToDatabase(email);
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "email-form";
-        }
-        model.addAttribute("successMessage", "A password reset link has been sent to your email.");
-        return "email-form"; // Show the form with success message
-    }
+		if (!emailIsCorrect) {
+			model.addAttribute("errorMessage", "Invalid email format. Please enter a valid email.");
+			return "email-form"; // Return the form with an error message
+		}
+		try {
+			boolean createdTokenSuccessfully = passwordResetService.addTokenToDatabase(email);
+		} catch (Exception e) {
+			model.addAttribute("errorMessage", e.getMessage());
+			return "email-form";
+		}
+		model.addAttribute("successMessage", "A password reset link has been sent to your email.");
+		return "email-form"; // Show the form with success message
+	}
 
-    // EndPoints for React App
-    @GetMapping("/autocomplete")
-    public ResponseEntity<?> showAutocommplete(@RequestParam("card") String card) {
-        List<String> cardList = new ArrayList<>();
-        try {
-            cardList = scryFallApiClientImpl.searchCard(card);
-        } catch (CardDoesNotExistException e) {
-            ErrorDetails errorDetails = new ErrorDetails();
-            errorDetails.setMessage("Card does not exist in scryfall api...");
-            return ResponseEntity
-                    .badRequest()
-                    .body(errorDetails);
+	// EndPoints for React App
+	@GetMapping("/autocomplete")
+	public ResponseEntity<?> showAutocommplete(@RequestParam("card") String card) {
+		List<String> cardList = new ArrayList<>();
+		try {
+			cardList = scryFallApiClientImpl.searchCard(card);
+		} catch (CardDoesNotExistException e) {
+			ErrorDetails errorDetails = new ErrorDetails();
+			errorDetails.setMessage("Card does not exist in scryfall api...");
+			return ResponseEntity
+					.badRequest()
+					.body(errorDetails);
 
-        } catch (InterruptedException | IOException exception) {
-            exception.printStackTrace();
-        }
-        Map<String, List<String>> responseData = new HashMap<>();
-        responseData.put("data", cardList);
-        return new ResponseEntity<>(responseData, HttpStatus.OK);
-    }
+		} catch (InterruptedException | IOException exception) {
+			exception.printStackTrace();
+		}
+		Map<String, List<String>> responseData = new HashMap<>();
+		responseData.put("data", cardList);
+		return new ResponseEntity<>(responseData, HttpStatus.OK);
+	}
 
-    @PostMapping("/addCardToCommmaderDeck")
-    public ResponseEntity<?> addCardToCommander(@RequestParam("card") String card,
-            @RequestParam("commander") String commander) {
-        try {
-            scryFallApiClientImpl.addCardToCommanderDeck(card, commander);
+	@PostMapping("/addCardToCommmaderDeck")
+	public ResponseEntity<?> addCardToCommander(@RequestParam("card") String card,
+			@RequestParam("commander") String commander) {
+		try {
+			scryFallApiClientImpl.addCardToCommanderDeck(card, commander);
 
-        } catch (IOException | InterruptedException e) {
+		} catch (IOException | InterruptedException e) {
 
-            e.printStackTrace();
+			e.printStackTrace();
 
-        } catch (InvalidCommanderCardException exception) {
-            ErrorDetails errorDetails = new ErrorDetails();
-            errorDetails.setMessage("Commander or Card fields are empty...");
-            return ResponseEntity.badRequest().body(errorDetails);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+		} catch (InvalidCommanderCardException exception) {
+			ErrorDetails errorDetails = new ErrorDetails();
+			errorDetails.setMessage("Commander or Card fields are empty...");
+			return ResponseEntity.badRequest().body(errorDetails);
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
-    @GetMapping("/user")
-    public ResponseEntity<?> getProfile(Principal principal) {
-        var userName = principal.getName();
-        String currentCommander = "";
-        try {
-            currentCommander = commanderService.getCurrentCommander();
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
-        }
-        Map<String, String> responseData = new HashMap<>();
-        responseData.put("userName", userName);
-        responseData.put("commander", currentCommander);
+	@GetMapping("/user")
+	public ResponseEntity<?> getProfile(Principal principal) {
+		var userName = principal.getName();
+		String currentCommander = "";
+		try {
+			currentCommander = commanderService.getCurrentCommander();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		Map<String, String> responseData = new HashMap<>();
+		responseData.put("userName", userName);
+		responseData.put("commander", currentCommander);
 
-        return new ResponseEntity<>(responseData, HttpStatus.OK);
-    }
+		return new ResponseEntity<>(responseData, HttpStatus.OK);
+	}
 
-    @PostMapping("/advance-search")
-    public ResponseEntity<?> advanceSearchScryFallApi(@RequestBody Search search) {
-        // Create a List for cards
-        List<MagicCard> listOfCards = new ArrayList<>();
-        try {
-            listOfCards = scryFallApiClientImpl.advanceSearch(search);
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
-        }
-        Map<String, List<MagicCard>> responseData = new HashMap<>();
-        responseData.put("data", listOfCards);
-        return new ResponseEntity<>(responseData, HttpStatus.OK);
-    }
+	@PostMapping("/advance-search")
+	public ResponseEntity<?> advanceSearchScryFallApi(@RequestBody Search search) {
+		// Create a List for cards
+		List<MagicCard> listOfCards = new ArrayList<>();
+		try {
+			listOfCards = scryFallApiClientImpl.advanceSearch(search);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		Map<String, List<MagicCard>> responseData = new HashMap<>();
+		responseData.put("data", listOfCards);
+		return new ResponseEntity<>(responseData, HttpStatus.OK);
+	}
+
+	// Get Commander Deck that is current and its cards
+	@GetMapping("/commander-deck")
+	public ResponseEntity<?> getCurrentCommanderDeck() {
+		Optional<Commander> commander = commanderService.getCurrentCommanderDeck();
+		List<MagicCard> listOfCards = commander.get().getMagicCards();
+		Map<String, List<MagicCard>> responseData = new HashMap<>();
+		responseData.put("list", listOfCards);
+		return new ResponseEntity<>(responseData, HttpStatus.OK);
+	}
+
 }
