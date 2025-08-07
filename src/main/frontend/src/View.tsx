@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { TextField, InputLabel, FormControl, MenuItem } from '@mui/material';
+import { useState } from 'react'
+import { InputLabel, FormControl, MenuItem } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 function View() {
