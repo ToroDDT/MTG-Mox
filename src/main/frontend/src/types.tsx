@@ -1,3 +1,6 @@
+export type CommanderDeckResponse = {
+  data: ScryfallCard[];
+};
 
 export type ScryfallCard = {
   object: string;
