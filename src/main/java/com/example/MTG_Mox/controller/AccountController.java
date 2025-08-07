@@ -179,12 +179,13 @@ public class AccountController {
 	}
 
 	// Get Commander Deck that is current and its cards
+
 	@GetMapping("/commander-deck")
 	public ResponseEntity<?> getCurrentCommanderDeck() {
 		Optional<Commander> commander = commanderService.getCurrentCommanderDeck();
 		List<MagicCard> listOfCards = commander.get().getMagicCards();
 		Map<String, List<MagicCard>> responseData = new HashMap<>();
-		responseData.put("list", listOfCards);
+		responseData.put("data", listOfCards);
 		return new ResponseEntity<>(responseData, HttpStatus.OK);
 	}
 
