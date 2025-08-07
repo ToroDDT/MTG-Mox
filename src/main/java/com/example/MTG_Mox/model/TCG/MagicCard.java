@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "magic_card")
@@ -28,21 +29,28 @@ public class MagicCard {
     private List<Integer> multiverseIds;
 
     private Integer mtgoId;
+    @JsonProperty("tcgplayer_id")
     private Integer tcgplayerId;
+    @JsonProperty("cardmarket_id")
     private Integer cardmarketId;
     private String lang;
+    @JsonProperty("released_at")
     private String releasedAt;
     private String uri;
 
     @Column(name = "scryfall_uri")
+    @JsonProperty("scryfall_uri")
     private String scryfallUri;
 
     private String layout;
     private boolean highresImage;
     private String imageStatus;
+    @JsonProperty("mana_cost")
     private String manaCost;
     private Integer cmc;
+    @JsonProperty("type_line")
     private String typeLine;
+    @JsonProperty("oracle_text")
     private String oracleText;
 
     @ElementCollection
@@ -61,11 +69,13 @@ public class MagicCard {
     private List<String> keywords;
 
     @ElementCollection
+    @JsonProperty("game_changer")
     @CollectionTable(name = "magic_card_games", joinColumns = @JoinColumn(name = "magic_card_id"))
     @Column(name = "game")
     private List<String> games;
 
     private boolean reserved;
+    @JsonProperty("game_changer")
     private boolean gameChanger;
     private boolean foil;
     private boolean nonfoil;
