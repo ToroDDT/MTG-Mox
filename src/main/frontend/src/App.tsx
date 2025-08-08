@@ -3,6 +3,7 @@ import Profile from "./Profile";
 import Nav from "./Nav";
 import AutoComplete from "./AutoComplete";
 import AdvanceSearch from "./AdvanceSearch";
+import CardGallery from "./CardGallery";
 function App() {
   const [commander, setCommander] = useState<string>("Necrobloom");
   const [name, setName] = useState("")
@@ -26,6 +27,7 @@ function App() {
       <div className="flex flex-col text-left">
         <AutoComplete />
         <AdvanceSearch />
+        <CardGallery />
       </div>
     </>
   )
