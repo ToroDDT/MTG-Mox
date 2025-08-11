@@ -9,11 +9,11 @@ import com.example.MTG_Mox.model.TCG.MagicCard;
 
 import java.io.IOException;
 
-public interface ScryFallApiClient {
+public interface ScryFallApiClient  {
 
     public List<String> searchCard(String card) throws IOException, InterruptedException, CardDoesNotExistException;
 
-    public Boolean addCardToCommanderDeck(String card, String commander)
+    public Boolean addCardToCommanderDeck(String card)
             throws IOException, InterruptedException, InvalidCommanderCardException;
 
     public List<MagicCard> advanceSearch(Search searchParameters) throws IOException, InterruptedException;
