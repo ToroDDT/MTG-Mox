@@ -1,5 +1,6 @@
 package com.example.MTG_Mox.controller;
 
+import com.example.MTG_Mox.MagicCardWrapper;
 import com.example.MTG_Mox.advice.CardDoesNotExistException;
 import com.example.MTG_Mox.advice.EmailDoesNotExistException;
 import com.example.MTG_Mox.advice.ErrorDetails;
@@ -7,6 +8,7 @@ import com.example.MTG_Mox.advice.InvalidCommanderCardException;
 import com.example.MTG_Mox.advice.UserAlreadyExistsException;
 import com.example.MTG_Mox.api.ScryFallApiClient;
 import com.example.MTG_Mox.api.ScryFallApiClientImpl;
+import com.example.MTG_Mox.dto.MagicCardDto;
 import com.example.MTG_Mox.model.Search;
 import com.example.MTG_Mox.model.User;
 import com.example.MTG_Mox.model.TCG.Commander;
@@ -46,16 +48,18 @@ import java.util.ArrayList;
 @Controller
 public class AccountController {
 
+	private final MagicCardWrapper magicCardWrapper;
 	private final PasswordResetService passwordResetService;
 	private final ScryFallApiClientImpl scryFallApiClientImpl;
 	private final CommanderService commanderService;
 
 	@Autowired
 	public AccountController(PasswordResetService passwordResetService, ScryFallApiClientImpl scryFallApiClientImpl,
-			CommanderService commanderService) {
+			CommanderService commanderService, MagicCardWrapper magicCardWrapper) {
 		this.passwordResetService = passwordResetService;
 		this.scryFallApiClientImpl = scryFallApiClientImpl;
 		this.commanderService = commanderService;
+		this.magicCardWrapper = magicCardWrapper; 
 	}
 
 	@Autowired
@@ -129,10 +133,9 @@ public class AccountController {
 	}
 
 	@PostMapping("/addCardToCommmaderDeck")
-	public ResponseEntity<?> addCardToCommander(@RequestParam("card") String card,
-			@RequestParam("commander") String commander) {
+	public ResponseEntity<?> addCardToCommander(@RequestParam("card") String card) {
 		try {
-			scryFallApiClientImpl.addCardToCommanderDeck(card, commander);
+			scryFallApiClientImpl.addCardToCommanderDeck(card);
 
 		} catch (IOException | InterruptedException e) {
 
@@ -185,6 +188,8 @@ public class AccountController {
 		Optional<Commander> commander = commanderService.getCurrentCommanderDeck();
 		List<MagicCard> listOfCards = commander.get().getMagicCards();
 		Map<String, List<MagicCard>> responseData = new HashMap<>();
+		List<MagicCardDto> listOfCardDtos = magicCardWrapper 
+				.toDtoList(commander.get().getMagicCards());
 		responseData.put("data", listOfCards);
 		return new ResponseEntity<>(responseData, HttpStatus.OK);
 	}
