@@ -5,32 +5,37 @@ import AutoComplete from "./AutoComplete";
 import AdvanceSearch from "./AdvanceSearch";
 import CardGallery from "./CardGallery";
 function App() {
-  const [commander, setCommander] = useState<string>("Necrobloom");
-  const [name, setName] = useState("")
+	const [commander, setCommander] = useState<string>("Necrobloom");
+	const [name, setName] = useState("")
 
-  useEffect(() => {
-    // Make the HTTP request when the component mounts
-    fetch('http://localhost:8080/user')
-      .then((res) => res.json())
-      .then((data) => {
-        setCommander(data.commander);
-        setName(data.userName)
-      })
-      .catch((error) => {
-        console.error('Error fetching users:', error);
-      });
-  }, []); // <-- empty array = run only once when the component mounts
-  return (
-    <>
-      <Nav />
-      <Profile commander={commander} name={name} />
-      <div className="flex flex-col text-left">
-        <AutoComplete />
-        <AdvanceSearch />
-        <CardGallery />
-      </div>
-    </>
-  )
+	useEffect(() => {
+		// Make the HTTP request when the component mounts
+		fetch('http://localhost:8080/user')
+			.then((res) => res.json())
+			.then((data) => {
+				setCommander(data.commander);
+				setName(data.userName)
+			})
+			.catch((error) => {
+				console.error('Error fetching users:', error);
+			});
+	}, []); // <-- empty array = run only once when the component mounts
+	return (
+		<>
+			<Nav />
+			<Profile commander={commander} name={name} />
+			<div className="flex flex-col text-left">
+				<div className="flex flex-row justify-between">
+					<div>
+						<AutoComplete />
+						<AdvanceSearch />
+
+					</div>
+					<CardGallery />
+				</div>
+			</div>
+		</>
+	)
 }
 
 export default App;

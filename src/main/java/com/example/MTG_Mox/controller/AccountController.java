@@ -52,18 +52,17 @@ public class AccountController {
 	private final PasswordResetService passwordResetService;
 	private final ScryFallApiClientImpl scryFallApiClientImpl;
 	private final CommanderService commanderService;
+	private final AccountService accountService;
 
 	@Autowired
 	public AccountController(PasswordResetService passwordResetService, ScryFallApiClientImpl scryFallApiClientImpl,
-			CommanderService commanderService, MagicCardWrapper magicCardWrapper) {
+			CommanderService commanderService, MagicCardWrapper magicCardWrapper, AccountService accountService) {
 		this.passwordResetService = passwordResetService;
 		this.scryFallApiClientImpl = scryFallApiClientImpl;
 		this.commanderService = commanderService;
 		this.magicCardWrapper = magicCardWrapper; 
+		this.accountService = accountService;
 	}
-
-	@Autowired
-	AccountService accountService;
 
 	@GetMapping("/home")
 	public String showHome() {
