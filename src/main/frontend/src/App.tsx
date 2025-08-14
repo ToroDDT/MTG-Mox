@@ -4,17 +4,23 @@ import Nav from "./Nav";
 import AutoComplete from "./AutoComplete";
 import AdvanceSearch from "./AdvanceSearch";
 import CardGallery from "./CardGallery";
+
+interface UserResponse {
+	commander: string;
+	userName: string;
+}
+
 function App() {
 	const [commander, setCommander] = useState<string>("Necrobloom");
-	const [name, setName] = useState("")
+	const [name, setName] = useState<string>("")
 
 	useEffect(() => {
 		// Make the HTTP request when the component mounts
 		fetch('http://localhost:8080/user')
-			.then((res) => res.json())
+			.then((res) => res.json() as Promise<UserResponse>)
 			.then((data) => {
-				setCommander(data.commander);
-				setName(data.userName)
+				setCommander(data?.commander ?? "No Commander has been chosen");
+				setName(data?.userName ?? "Unknown");
 			})
 			.catch((error) => {
 				console.error('Error fetching users:', error);
@@ -24,14 +30,18 @@ function App() {
 		<>
 			<Nav />
 			<Profile commander={commander} name={name} />
-			<div className="flex flex-col text-left">
-				<div className="flex flex-row justify-between">
-					<div>
+			<div className="flex flex-col text-left w-full">
+				<div className="flex flex-row w-full justify-between">
+					{/* Left side */}
+					<div className="flex space-x-2">
 						<AutoComplete />
 						<AdvanceSearch />
-
 					</div>
-					<CardGallery />
+
+					{/* Right side */}
+					<div className="flex">
+						<CardGallery />
+					</div>
 				</div>
 			</div>
 		</>
