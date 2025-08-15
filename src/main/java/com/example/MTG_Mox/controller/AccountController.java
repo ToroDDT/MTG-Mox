@@ -117,10 +117,12 @@ public class AccountController {
 
 	// EndPoints for React App
 	@GetMapping("/autocomplete")
-	public ResponseEntity<?> showAutocommplete(@RequestParam("card") String card) {
+	public ResponseEntity<?> showAutocommplete(@RequestParam("card") String card)
+			throws UnsupportedEncodingException {
 		List<String> cardList = new ArrayList<>();
+		String encodedValue = URLEncoder.encode(card, StandardCharsets.UTF_8.toString());
 		try {
-			cardList = scryFallApiClientImpl.searchCard(card);
+			cardList = scryFallApiClientImpl.searchCard(encodedValue);
 		} catch (CardDoesNotExistException e) {
 			ErrorDetails errorDetails = new ErrorDetails();
 			errorDetails.setMessage("Card does not exist in scryfall api...");
@@ -128,7 +130,7 @@ public class AccountController {
 					.badRequest()
 					.body(errorDetails);
 
-		} catch (InterruptedException | IOException exception) {
+		} catch (InterruptedException | IOException | UnsupportedOperationException exception) {
 			exception.printStackTrace();
 		}
 		Map<String, List<String>> responseData = new HashMap<>();
