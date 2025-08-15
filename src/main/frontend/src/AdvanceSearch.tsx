@@ -77,7 +77,7 @@ function AdvanceSearch() {
 		toughness: 0,
 	});
 
-	const [open, setOpen] = useState(false)
+	const [open, setOpen] = useState<boolean>(false)
 	async function sendForm() {
 		console.log("Form Submitted");
 		try {
