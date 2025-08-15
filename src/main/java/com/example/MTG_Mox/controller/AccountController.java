@@ -38,6 +38,8 @@ import org.springframework.web.client.HttpClientErrorException.BadRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.StackWalker.Option;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -51,17 +53,20 @@ public class AccountController {
 	private final MagicCardWrapper magicCardWrapper;
 	private final PasswordResetService passwordResetService;
 	private final ScryFallApiClientImpl scryFallApiClientImpl;
+	private final EmailValidatorJavaImpl emailValidatorJavaImpl;
 	private final CommanderService commanderService;
 	private final AccountService accountService;
 
 	@Autowired
 	public AccountController(PasswordResetService passwordResetService, ScryFallApiClientImpl scryFallApiClientImpl,
-			CommanderService commanderService, MagicCardWrapper magicCardWrapper, AccountService accountService) {
+			CommanderService commanderService, MagicCardWrapper magicCardWrapper,
+			AccountService accountService, EmailValidatorJavaImpl emailValidatorJavaImpl) {
 		this.passwordResetService = passwordResetService;
 		this.scryFallApiClientImpl = scryFallApiClientImpl;
 		this.commanderService = commanderService;
-		this.magicCardWrapper = magicCardWrapper; 
+		this.magicCardWrapper = magicCardWrapper;
 		this.accountService = accountService;
+		this.emailValidatorJavaImpl = emailValidatorJavaImpl;
 	}
 
 	@GetMapping("/home")
@@ -93,8 +98,8 @@ public class AccountController {
 	@PostMapping("/forgot-password")
 	public String sendEmailLinkToResetPassword(@RequestParam("email") String email, Model model)
 			throws MessagingException, UnsupportedEncodingException, EmailDoesNotExistException {
-		EmailValidators emailValidator = new EmailValidatorJavaImpl(); // Consider injecting this via @Service
-		boolean emailIsCorrect = emailValidator.validateEmail(email);
+
+		boolean emailIsCorrect = emailValidatorJavaImpl.validateEmail(email);
 
 		if (!emailIsCorrect) {
 			model.addAttribute("errorMessage", "Invalid email format. Please enter a valid email.");
