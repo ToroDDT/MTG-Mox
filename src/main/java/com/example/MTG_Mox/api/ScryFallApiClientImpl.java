@@ -82,7 +82,7 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
 	}
 
 	@Override
-	public Boolean addCardToCommanderDeck(String card)
+	public void addCardToCommanderDeck(String card)
 			throws IOException, InterruptedException, InvalidCommanderCardException {
 		if (card.isEmpty()) {
 			throw new InvalidCommanderCardException();
@@ -94,7 +94,7 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
 
 		// 2. Build an HttpRequest
 		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create("https://api.scryfall.com/cards/named?exact=" + cardName))
+				.uri(URI.create("https://api.scryfall.com/cards/named?exact=" + encodedName))
 				.GET()
 				.header("Accept", "application/json")
 				.header("User-Agent", "MTG-MOX-APP")
@@ -103,8 +103,6 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		ObjectMapper objectMapper = new ObjectMapper();
 		MagicCard magicCard = objectMapper.readValue(response.body(), MagicCard.class);
-		// find current commander
-		return true;
 	}
 
 	@Override

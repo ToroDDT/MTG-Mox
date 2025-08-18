@@ -13,7 +13,7 @@ public interface ScryFallApiClient  {
 
     public List<String> searchCard(String card) throws IOException, InterruptedException, CardDoesNotExistException;
 
-    public Boolean addCardToCommanderDeck(String card)
+    public void addCardToCommanderDeck(String card)
             throws IOException, InterruptedException, InvalidCommanderCardException;
 
     public List<MagicCard> advanceSearch(Search searchParameters) throws IOException, InterruptedException;
