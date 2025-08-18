@@ -4,8 +4,9 @@ import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import useDebounce from './Hook';
 
-type autoCompleteList = {
+type AutoCompleteList = {
 	data: string[];
 };
 
@@ -14,6 +15,9 @@ function AutoComplete() {
 	const [cards, setCards] = useState<string[]>([]);
 	const [cardSelected, setCardSelected] = useState<string>('');
 	const [selectedIndex, setSelectedIndex] = useState(1);
+	
+	const debouncedInput = useDebounce(input, 1000);
+
 	useEffect(() => {
 		const encodedValue = encodeURIComponent(cardSelected);
 		fetch('http://localhost:8080/addCardToCommmaderDeck?card=' + encodedValue, {
@@ -21,31 +25,25 @@ function AutoComplete() {
 		});
 	}, [cardSelected]);
 
+	// 4️⃣ Fetch cards when debouncedInput changes
 	useEffect(() => {
-		const timeout = setTimeout(() => {
-			fetch(
-				`http://localhost:8080/autocomplete?card=${encodeURIComponent(input)}`,
-				{
-					method: 'GET',
-				},
-			)
-				.then((response) => response.json() as Promise<autoCompleteList>)
-				.then((cardList) => {
-					if (cardList.data.length === 0) {
-						return;
-					} else {
-						setCards(cardList.data);
-					}
-				})
-				.catch((error) => {
-					console.error('Error fetching data:', error);
-				});
-		}, 1000); // Waits 1s after last keystroke
+		if (!debouncedInput.trim()) return; // skip empty or whitespace-only input
 
-		return () => {
-			clearTimeout(timeout); // cancel timeout if input changes
+		const fetchCards = async () => {
+			try {
+				const response = await fetch(
+					`http://localhost:8080/autocomplete?card=${encodeURIComponent(debouncedInput)}`
+				);
+				const cardList: AutoCompleteList = await response.json();
+				setCards(cardList.data || []);
+			} catch (error) {
+				console.error('Error fetching data:', error);
+			}
 		};
-	}, [input]);
+
+		fetchCards();
+	}, [debouncedInput]);
+
 	return (
 		<>
 			<div>
