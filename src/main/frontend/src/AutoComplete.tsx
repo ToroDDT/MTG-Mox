@@ -5,12 +5,13 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import useDebounce from './Hook';
+import { ListLayoutSetter } from './types';
 
 type AutoCompleteList = {
 	data: string[];
 };
 
-function AutoComplete() {
+function AutoComplete({setListLayout} : ListLayoutSetter) {
 	const [showDropdown, setShowDropdown] = useState(false);
 	const [input, setInput] = useState('');
 	const [cards, setCards] = useState<string[]>([]);

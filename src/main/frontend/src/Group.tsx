@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { FormControl, MenuItem } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { OutlinedInput } from '@mui/material';
-function Group() {
+import { ListLayoutSetter } from './types';
+
+function Group({setListLayout} : ListLayoutSetter) {
 	const [group, setGroupView] = useState('Type')
 	const handleChange = (event: SelectChangeEvent) => {
 		setGroupView(event.target.value as string);

@@ -37,7 +37,6 @@ import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.StackWalker.Option;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;

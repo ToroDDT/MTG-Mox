@@ -1,5 +1,6 @@
 import { useReducer, useState } from "react";
 import { Dialog, FormControl, Select, MenuItem, TextField, Button, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { ListLayoutSetter } from "./types";
 
 type State = {
 	name: string;
@@ -63,7 +64,7 @@ function formReducer(state: State, action: Action): State {
 	}
 }
 
-function AdvanceSearch() {
+function AdvanceSearch({setListLayout} : ListLayoutSetter) {
 
 	const [state, dispatch] = useReducer(formReducer, {
 		name: "",
