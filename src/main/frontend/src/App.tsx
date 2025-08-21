@@ -4,6 +4,8 @@ import Nav from "./Nav";
 import AutoComplete from "./AutoComplete";
 import AdvanceSearch from "./AdvanceSearch";
 import CardGallery from "./CardGallery";
+import { ListLayout } from "./types";
+import CardDeckView from "./CardDeckView";
 
 interface UserResponse {
 	commander: string;
@@ -11,6 +13,7 @@ interface UserResponse {
 }
 
 function App() {
+	const [listlayout, setListLayout] = useState<ListLayout>({sort: "Price", group: "Type", view: "Text", card: ""})
 	const [commander, setCommander] = useState<string>("Necrobloom");
 	const [name, setName] = useState<string>("")
 
@@ -34,16 +37,17 @@ function App() {
 				<div className="flex flex-row w-full justify-between">
 					{/* Left side */}
 					<div className="flex space-x-2">
-						<AutoComplete />
-						<AdvanceSearch />
+						<AutoComplete setListLayout = {setListLayout} />
+						<AdvanceSearch setListLayout = {setListLayout} />
 					</div>
 
 					{/* Right side */}
 					<div className="flex">
-						<CardGallery />
+						<CardGallery setListLayout = {setListLayout}/>
 					</div>
 				</div>
 			</div>
+			<CardDeckView listLayout = {listlayout}/> 
 		</>
 	)
 }

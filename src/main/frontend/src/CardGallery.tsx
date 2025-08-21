@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import CardGroupByType from "./CardGroupByType";
-import { CommanderDeckResponse, ScryfallCard } from "./types";
+import { CommanderDeckResponse, ListLayoutSetter, ScryfallCard } from "./types";
 import View from "./View";
 import Sort from "./Sort";
 import Group from "./Group";
 
-function CardGallery() {
+function CardGallery({setListLayout} : ListLayoutSetter) {
 	const [cards, setCards] = useState<ScryfallCard[]>([]);
 
 	useEffect(() => {
@@ -28,9 +28,9 @@ function CardGallery() {
 	return (
 		<>
 			<div className="flex flex-row justify-between">
-				<View />
-				<Sort />
-				<Group />
+				<View setListLayout = {setListLayout}/>
+				<Sort setListLayout = {setListLayout}/>
+				<Group setListLayout = {setListLayout}/>
 			</div>
 			<div>
 				<CardGroupByType
