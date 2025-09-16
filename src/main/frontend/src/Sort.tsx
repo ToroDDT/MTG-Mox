@@ -2,11 +2,16 @@ import { useState } from 'react'
 import { FormControl, MenuItem } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { OutlinedInput } from '@mui/material';
-function Sort() {
+import { ListLayoutSetter } from './types';
+function Sort({ setListLayout }: ListLayoutSetter) {
 
 	const [sort, setSort] = useState('Price')
 	const handleChange = (event: SelectChangeEvent) => {
 		setSort(event.target.value as string);
+		setListLayout(prev => ({
+			...prev,
+			sort: event.target.value as "Price" | "Name" | "Rarity" | "Mana-Value"
+		}));
 	};
 	return (
 		<>
