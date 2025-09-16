@@ -1,10 +1,18 @@
 import { useReducer, useState } from "react";
-import { Grid, Dialog, FormControl, Select, MenuItem, TextField, Button, DialogActions, DialogContent, DialogTitle, Card, CardContent, Typography, CircularProgress } from "@mui/material";
+// src/AdvanceSearch.tsx
+import type { CardAPI } from "./types";
+import { Grid, Dialog, FormControl, Select, MenuItem, TextField, Button, DialogActions, DialogContent, DialogTitle, Card, CardContent, Typography } from "@mui/material";
 
 // Advance Search 
 // When button is clicked display advance search modal 
 // submit form to backend and return response 
 // Show Response in a modal 
+type CardResultsDialogProps = {
+	isOpen: boolean,
+	onClose: () => void,
+	cards: CardAPI[]
+}
+
 type State = {
 	name: string;
 	set: string;
@@ -69,7 +77,9 @@ function formReducer(state: State, action: Action): State {
 
 function AdvanceSearch() {
 	const [isCardReturned, setIsCardReturned] = useState(false);
+	const [cards, setCards] = useState<CardAPI[]>([]);
 	const [open, setOpen] = useState<boolean>(false)
+	const [openCardsDialog, setOpenCardsDialog] = useState(false)
 
 	const [state, dispatch] = useReducer(formReducer, {
 		name: "",
@@ -101,7 +111,9 @@ function AdvanceSearch() {
 			}
 
 			const result = await response.json();
+			setCards(result.data)
 			setIsCardReturned(true)
+			setOpenCardsDialog(true)
 
 
 
@@ -114,16 +126,20 @@ function AdvanceSearch() {
 
 	return (
 		<>
-			{isCardReturned ? CardResultsDialog : (
-				<div>
+			{isCardReturned ? (<CardResultsDialog cards={cards} isOpen={openCardsDialog} onClose={() => setOpenCardsDialog(false)} />) : (
+				<div className="flex">
 					<Button sx={{
 						border: 'none',
 						width: 'fit-content',
-						color: 'purple',     // Purple text
-						fontSize: '0.7rem',  // Smaller text
-						minWidth: 'auto',    // Let it shrink
-						lineHeight: 1,
-						textTransform: 'none' // Prevent all caps if undesired
+						color: 'purple',
+						fontSize: '0.7rem',
+						minWidth: 'auto',
+						textTransform: 'none',
+						display: 'flex',              // ensure flex container
+						alignItems: 'center',         // vertically center content
+						justifyContent: 'center',     // horizontally center content (optional)
+						paddingY: 0.5,                // optional: control vertical padding
+						paddingX: 1,
 					}} variant="outlined" onClick={() => setOpen(true)}>
 						Advance Search
 					</Button>
@@ -310,54 +326,38 @@ function AdvanceSearch() {
 }
 
 
-function CardResultsDialog() {
-	const [open, setOpen] = useState(false);
-	const [cards, setCards] = useState([]);
-	const [loading, setLoading] = useState(false);
-
-	const handleOpen = () => {
-		setOpen(true);
-		fetchCards();
-	};
-
-	const handleClose = () => {
-		setOpen(false);
-		setCards([]);
-	};
-
+function CardResultsDialog({ isOpen, onClose, cards }: CardResultsDialogProps) {
 	return (
 		<>
-			<Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+			<Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="md">
 				<DialogTitle>Card Results</DialogTitle>
 				<DialogContent>
-					{loading ? (
-						<div style={{ display: "flex", justifyContent: "center", padding: "2rem" }}>
-							<CircularProgress />
-						</div>
-					) : cards.length === 0 ? (
+					{cards.length === 0 ? (
 						<Typography align="center" sx={{ mt: 2 }}>
 							No cards found.
 						</Typography>
 					) : (
-						<Grid container spacing={2} sx={{ mt: 1 }} component="div">
+						<Grid container spacing={2} sx={{ mt: 1, display: "flex", flexWrap: "wrap", justifyContent: "center" }} component="div">
 							{cards.map((card) => (
 								<Grid
 									component="div"
 									key={String(card.id)}
 									sx={{
 										width: {
-											xs: '100%',      // full width on extra-small screens
-											sm: '50%',       // half width on small screens
-											md: '33.333%',   // one-third width on medium screens
+											xs: "100%",      // full width on extra-small screens
+											sm: "50%",       // half width on small screens
+											md: "33.33%",   // one-third width on medium screens
 										},
-										padding: 1,         // optional spacing inside each card
-										boxSizing: 'border-box', // ensure padding doesn't break width
+										padding: 1,         // spacing inside each card
+										boxSizing: "border-box",
 									}}
 								>
 									<Card variant="outlined" sx={{ height: "100%" }}>
 										<CardContent>
 											<Typography variant="h6">{card.name}</Typography>
-											<Typography color="text.secondary">{card.type}</Typography>
+											<Typography color="text.secondary">
+												{card.type_line}
+											</Typography>
 											{card.oracle_text && (
 												<Typography variant="body2" sx={{ mt: 1 }}>
 													{card.oracle_text}
