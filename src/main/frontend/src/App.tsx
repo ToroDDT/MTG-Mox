@@ -28,7 +28,7 @@ function App() {
 			.catch((error) => {
 				console.error('Error fetching users:', error);
 			});
-	}, [listlayout]); // <-- empty array = run only once when the component mounts
+	}, []); // <-- empty array = run only once when the component mounts
 	return (
 		<>
 			<Nav />
@@ -38,7 +38,7 @@ function App() {
 					{/* Left side */}
 					<div className="flex space-x-2">
 						<AutoComplete setListLayout = {setListLayout} />
-						<AdvanceSearch />
+						<AdvanceSearch setListLayout = {setListLayout} />
 					</div>
 
 					{/* Right side */}
