@@ -11,7 +11,7 @@ type AutoCompleteList = {
 	data: string[];
 };
 
-function AutoComplete({setListLayout} : ListLayoutSetter) {
+function AutoComplete({ setListLayout }: ListLayoutSetter) {
 	const [showDropdown, setShowDropdown] = useState(false);
 	const [input, setInput] = useState('');
 	const [cards, setCards] = useState<string[]>([]);
@@ -28,7 +28,11 @@ function AutoComplete({setListLayout} : ListLayoutSetter) {
 		fetch('http://localhost:8080/addCardToCommmaderDeck?card=' + encodedValue, {
 			method: 'POST',
 		});
-	}, [cardSelected]);
+		setListLayout(prev => ({
+			...prev,       // keep all the existing fields
+			card: cardSelected // update just card
+		}));
+	}, [cardSelected, setListLayout]);
 
 	// Fetch autocomplete list
 	useEffect(() => {

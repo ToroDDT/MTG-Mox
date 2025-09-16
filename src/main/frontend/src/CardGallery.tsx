@@ -1,43 +1,17 @@
-import { useState, useEffect } from "react";
-import CardGroupByType from "./CardGroupByType";
-import { CommanderDeckResponse, ListLayoutSetter, ScryfallCard } from "./types";
+import { ListLayoutSetter } from "./types";
 import View from "./View";
 import Sort from "./Sort";
 import Group from "./Group";
 
-function CardGallery({setListLayout} : ListLayoutSetter) {
-	const [cards, setCards] = useState<ScryfallCard[]>([]);
-
-	useEffect(() => {
-		fetch(
-			`http://localhost:8080/commander-deck`,
-			{
-				method: 'GET',
-			},
-		)
-			.then((response) => response.json() as Promise<CommanderDeckResponse>)
-			.then((cardList) => {
-				setCards(cardList.data);
-			})
-			.catch((error) => {
-				console.error('Error fetching data:', error);
-			});
-
-	}, []);
-
-	return (
+function CardGallery({ setListLayout }: ListLayoutSetter) {
+		return (
 		<>
 			<div className="flex flex-row justify-between">
-				<View setListLayout = {setListLayout}/>
-				<Sort setListLayout = {setListLayout}/>
-				<Group setListLayout = {setListLayout}/>
+				<View setListLayout={setListLayout} />
+				<Sort setListLayout={setListLayout} />
+				<Group setListLayout={setListLayout} />
 			</div>
-			<div>
-				<CardGroupByType
-					cards={cards}
-				/>
-			</div>
-	</>
+		</>
 	)
 }
 
