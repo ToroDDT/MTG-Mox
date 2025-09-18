@@ -1,12 +1,6 @@
 import { useReducer, useState } from "react";
-// src/AdvanceSearch.tsx
 import type { CardAPI } from "./types";
 import { Grid, Dialog, FormControl, Select, MenuItem, TextField, Button, DialogActions, DialogContent, DialogTitle, Card, CardContent, Typography } from "@mui/material";
-
-// Advance Search 
-// When button is clicked display advance search modal 
-// submit form to backend and return response 
-// Show Response in a modal 
 type CardResultsDialogProps = {
 	isOpen: boolean,
 	onClose: () => void,
@@ -126,23 +120,25 @@ function AdvanceSearch() {
 
 	return (
 		<>
+			<div className="flex">
+				<Button sx={{
+					border: 'none',
+					width: 'fit-content',
+					color: 'purple',
+					fontSize: '0.7rem',
+					minWidth: 'auto',
+					textTransform: 'none',
+					display: 'flex',              // ensure flex container
+					alignItems: 'center',         // vertically center content
+					justifyContent: 'center',     // horizontally center content (optional)
+					paddingY: 0.5,                // optional: control vertical padding
+					paddingX: 1,
+				}} variant="outlined" onClick={() => setOpen(true)}>
+					Advance Search
+				</Button>
+			</div>
 			{isCardReturned ? (<CardResultsDialog cards={cards} isOpen={openCardsDialog} onClose={() => setOpenCardsDialog(false)} />) : (
 				<div className="flex">
-					<Button sx={{
-						border: 'none',
-						width: 'fit-content',
-						color: 'purple',
-						fontSize: '0.7rem',
-						minWidth: 'auto',
-						textTransform: 'none',
-						display: 'flex',              // ensure flex container
-						alignItems: 'center',         // vertically center content
-						justifyContent: 'center',     // horizontally center content (optional)
-						paddingY: 0.5,                // optional: control vertical padding
-						paddingX: 1,
-					}} variant="outlined" onClick={() => setOpen(true)}>
-						Advance Search
-					</Button>
 					<Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
 						<DialogTitle>Advanced Search</DialogTitle>
 						<DialogContent>
@@ -344,9 +340,9 @@ function CardResultsDialog({ isOpen, onClose, cards }: CardResultsDialogProps) {
 									key={String(card.id)}
 									sx={{
 										width: {
-											xs: "100%",      // full width on extra-small screens
-											sm: "50%",       // half width on small screens
-											md: "33.33%",   // one-third width on medium screens
+											xs: "100%",
+											sm: "50%",
+											md: "33.33%",
 										},
 										padding: 1,         // spacing inside each card
 										boxSizing: "border-box",
