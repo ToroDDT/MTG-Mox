@@ -1,6 +1,6 @@
 import { useReducer, useState } from "react";
 import type { CardAPI } from "./types";
-import { Grid, Dialog, FormControl, Select, MenuItem, TextField, Button, DialogActions, DialogContent, DialogTitle, Card, CardContent, Typography } from "@mui/material";
+import { Grid, CardActions,  Dialog, FormControl, Select, MenuItem, TextField, Button, DialogActions, DialogContent, DialogTitle, Card, CardContent, Typography } from "@mui/material";
 type CardResultsDialogProps = {
 	isOpen: boolean,
 	onClose: () => void,
@@ -323,6 +323,28 @@ function AdvanceSearch() {
 
 
 function CardResultsDialog({ isOpen, onClose, cards }: CardResultsDialogProps) {
+
+	async function sendCardSelectedToDatabase(card: CardAPI) {
+		console.log("Form Submitted");
+		try {
+			const response = await fetch("http://localhost:8080/addCardToCommmaderDeck", {
+				method: "POST",
+				credentials: "include",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(card),
+			});
+
+			if (!response.ok) {
+				const errorText = await response.text();
+				throw new Error(`HTTP ${response.status} - ${errorText}`);
+			}
+		} catch (error) {
+			console.error("Failed to retrieve card data from advance search:", error);
+		}
+	}
+
 	return (
 		<>
 			<Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="md">
@@ -360,6 +382,15 @@ function CardResultsDialog({ isOpen, onClose, cards }: CardResultsDialogProps) {
 												</Typography>
 											)}
 										</CardContent>
+										<CardActions>
+											<Button
+												size="small"
+												variant="contained"
+												onClick={() => sendCardSelectedToDatabase(card)}
+											>
+												Add Card to Deck
+											</Button>
+										</CardActions>
 									</Card>
 								</Grid>
 							))}
