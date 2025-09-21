@@ -1,13 +1,18 @@
 import { useState } from 'react'
 import { FormControl, MenuItem, OutlinedInput } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import {  ListLayoutSetter } from './types';
+import { ListLayoutSetter } from './types';
 
-function View({setListLayout} : ListLayoutSetter) {
+function View({ setListLayout }: ListLayoutSetter) {
 	const [view, setView] = useState('Text')
 	const handleChange = (event: SelectChangeEvent) => {
 		setView(event.target.value as string);
+		setListLayout(prev => ({
+			...prev,
+			view: event.target.value as "Text" | "Condensed Text" | "Visual Grid" | "Visual Stacks"
+		}));
 	};
+
 	return (
 		<>
 			<div className='flex'>

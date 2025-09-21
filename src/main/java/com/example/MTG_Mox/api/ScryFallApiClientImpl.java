@@ -131,69 +131,44 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
 			 * {@code https://api.scryfall.com/cards/search?q=pow>3+set:neo+t:creature}
 			 * </p>
 			 */
-			UriComponentsBuilder urlBuilder = UriComponentsBuilder
-					.fromUriString("https://api.scryfall.com/cards/search");
-			StringBuilder stringBuilder = new StringBuilder("");
+			List<String> parts = new ArrayList<>();
 
 			if (searchParameter.getPower() != null && searchParameter.getRelativePower() != null) {
-				if (!checkIfStringIsEmpty(stringBuilder))
-					stringBuilder.append("+");
-
 				switch (searchParameter.getRelativePower()) {
-					case "Greater than" ->
-						stringBuilder.append("pow>").append(searchParameter.getPower());
-					case "Equal to" ->
-						stringBuilder.append("pow=").append(searchParameter.getPower());
-					case "Less than" ->
-						stringBuilder.append("pow<").append(searchParameter.getPower());
+					case "Greater than" -> parts.add("pow>" + searchParameter.getPower());
+					case "Equal to" -> parts.add("pow=" + searchParameter.getPower());
+					case "Less than" -> parts.add("pow<" + searchParameter.getPower());
 				}
 			}
 
 			if (searchParameter.getToughness() != null && searchParameter.getRelativeToughness() != null) {
-				if (!checkIfStringIsEmpty(stringBuilder))
-					stringBuilder.append("+");
-
 				switch (searchParameter.getRelativeToughness()) {
-					case "Greater than" ->
-						stringBuilder.append("tou>").append(searchParameter.getToughness());
-					case "Equal to" ->
-						stringBuilder.append("tou=").append(searchParameter.getToughness());
-					case "Less than" ->
-						stringBuilder.append("tou<").append(searchParameter.getToughness());
+					case "Greater than" -> parts.add("tou>" + searchParameter.getToughness());
+					case "Equal to" -> parts.add("tou=" + searchParameter.getToughness());
+					case "Less than" -> parts.add("tou<" + searchParameter.getToughness());
 				}
 			}
 
-			if (searchParameter.getSet() != null && !searchParameter.getSet().isEmpty()) {
-				if (!checkIfStringIsEmpty(stringBuilder))
-					stringBuilder.append("+");
-				stringBuilder.append("set:").append(searchParameter.getSet());
-			}
+			if (searchParameter.getSet() != null && !searchParameter.getSet().isEmpty())
+				parts.add("set:" + searchParameter.getSet());
 
-			if (searchParameter.getName() != null && !searchParameter.getName().isEmpty()) {
-				if (!checkIfStringIsEmpty(stringBuilder))
-					stringBuilder.append("+");
-				stringBuilder.append("name://").append(searchParameter.getName()).append("/");
-			}
+			if (searchParameter.getName() != null && !searchParameter.getName().isEmpty())
+				parts.add("name:" + searchParameter.getName());
 
-			if (searchParameter.getCard_type() != null && !searchParameter.getCard_type().isEmpty()) {
-				if (!checkIfStringIsEmpty(stringBuilder))
-					stringBuilder.append("+");
-				stringBuilder.append("t:").append(searchParameter.getCard_type());
-			}
+			if (searchParameter.getCard_type() != null && !searchParameter.getCard_type().isEmpty())
+				parts.add("t:" + searchParameter.getCard_type());
 
 			if (searchParameter.getColors_identity() != null
-					&& !searchParameter.getColors_identity().isEmpty()) {
-				if (!checkIfStringIsEmpty(stringBuilder))
-					stringBuilder.append("+");
-				stringBuilder.append("id:").append(searchParameter.getColors_identity());
-			}
-			/**
-			 * When each parameter is added to the stringbuilder, it will then to converted
-			 * to a string {@link finalUrl}
-			 *
-			 */
-			String finalUrl = urlBuilder.queryParam("q", stringBuilder.toString()).toUriString();
+					&& !searchParameter.getColors_identity().isEmpty())
+				parts.add("id:" + searchParameter.getColors_identity());
 
+			// Join with spaces
+			String queryString = String.join(" ", parts);
+			String finalUrl = UriComponentsBuilder
+					.fromUriString("https://api.scryfall.com/cards/search")
+					.queryParam("q", queryString)
+					.queryParam("order", "cmc")
+					.toUriString();
 			/**
 			 * Creates a new HTTP client to send requests.
 			 *
