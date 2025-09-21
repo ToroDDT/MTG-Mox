@@ -1,11 +1,17 @@
 import { useReducer, useState } from "react";
 import type { CardAPI } from "./types";
-import { Grid, CardActions,  Dialog, FormControl, Select, MenuItem, TextField, Button, DialogActions, DialogContent, DialogTitle, Card, CardContent, Typography } from "@mui/material";
+import { Grid, CardActions, Dialog, FormControl, Select, MenuItem, TextField, Button, DialogActions, DialogContent, DialogTitle, Card, CardContent, Typography } from "@mui/material";
 type CardResultsDialogProps = {
 	isOpen: boolean,
 	onClose: () => void,
-	cards: CardAPI[]
+	cards: CardAPI[],
+	fetchCards: () => void
 }
+
+type AdvanceSearchProps = {
+	fetchCards: () => void
+}
+
 
 type State = {
 	name: string;
@@ -69,7 +75,7 @@ function formReducer(state: State, action: Action): State {
 	}
 }
 
-function AdvanceSearch() {
+function AdvanceSearch({ fetchCards }: AdvanceSearchProps) {
 	const [isCardReturned, setIsCardReturned] = useState(false);
 	const [cards, setCards] = useState<CardAPI[]>([]);
 	const [open, setOpen] = useState<boolean>(false)
@@ -137,7 +143,7 @@ function AdvanceSearch() {
 					Advance Search
 				</Button>
 			</div>
-			{isCardReturned ? (<CardResultsDialog cards={cards} isOpen={openCardsDialog} onClose={() => setOpenCardsDialog(false)} />) : (
+			{isCardReturned ? (<CardResultsDialog fetchCards={fetchCards} cards={cards} isOpen={openCardsDialog} onClose={() => setOpenCardsDialog(false)} />) : (
 				<div className="flex">
 					<Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
 						<DialogTitle>Advanced Search</DialogTitle>
@@ -322,7 +328,7 @@ function AdvanceSearch() {
 }
 
 
-function CardResultsDialog({ isOpen, onClose, cards }: CardResultsDialogProps) {
+function CardResultsDialog({ isOpen, onClose, cards, fetchCards }: CardResultsDialogProps) {
 
 	async function sendCardSelectedToDatabase(card: CardAPI) {
 		console.log("Form Submitted");

@@ -4,7 +4,7 @@ import Nav from "./Nav";
 import AutoComplete from "./AutoComplete";
 import AdvanceSearch from "./AdvanceSearch";
 import CardGallery from "./CardGallery";
-import { ListLayout } from "./types";
+import { ListLayout, ScryfallCard, CommanderDeckResponse } from "./types";
 import CardDeckView from "./CardDeckView";
 
 interface UserResponse {
@@ -13,10 +13,21 @@ interface UserResponse {
 }
 
 function App() {
-	const [listlayout, setListLayout] = useState<ListLayout>({sort: "Price", group: "Type", view: "Text", card: ""})
+	const [listlayout, setListLayout] = useState<ListLayout>({ sort: "Price", group: "Type", view: "Text", card: "" })
 	const [commander, setCommander] = useState<string>("Necrobloom");
 	const [name, setName] = useState<string>("")
+	const [cards, setCards] = useState<ScryfallCard[]>([]);
 
+	const fetchCardDeck = () => {
+		fetch("http://localhost:8080/commander-deck", { method: "GET" })
+			.then((response) => response.json() as Promise<CommanderDeckResponse>)
+			.then((cardList) => {
+				setCards(cardList.data);
+			})
+			.catch((error) => {
+				console.error("Error fetching data:", error);
+			});
+	};
 	useEffect(() => {
 		// Make the HTTP request when the component mounts
 		fetch('http://localhost:8080/user')
@@ -37,17 +48,17 @@ function App() {
 				<div className="flex flex-row w-full justify-between">
 					{/* Left side */}
 					<div className="flex space-x-2">
-						<AutoComplete setListLayout = {setListLayout} />
-						<AdvanceSearch />
+						<AutoComplete setListLayout={setListLayout} />
+						<AdvanceSearch fetchCardDeck={}/>
 					</div>
 
 					{/* Right side */}
 					<div className="flex">
-						<CardGallery setListLayout = {setListLayout}/>
+						<CardGallery setListLayout={setListLayout} />
 					</div>
 				</div>
 			</div>
-			<CardDeckView listLayout = {listlayout}/> 
+			<CardDeckView listLayout={listlayout} cards={cards} />
 		</>
 	)
 }
