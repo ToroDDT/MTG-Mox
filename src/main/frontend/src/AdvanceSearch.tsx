@@ -1,6 +1,7 @@
 import { useReducer, useState } from "react";
 import type { CardAPI } from "./types";
 import { Grid, CardActions, Dialog, FormControl, Select, MenuItem, TextField, Button, DialogActions, DialogContent, DialogTitle, Card, CardContent, Typography } from "@mui/material";
+
 type CardResultsDialogProps = {
 	isOpen: boolean,
 	onClose: () => void,
@@ -198,7 +199,7 @@ function AdvanceSearch({ fetchCards }: AdvanceSearchProps) {
 										<MenuItem value={"Green"}>Green</MenuItem>
 										<MenuItem value={"Colorless"}>Colorless</MenuItem>
 
-                //Two Color
+                //Two Colon
 										<MenuItem value={"Izzet"}>Izzet</MenuItem>
 										<MenuItem value={"Golgari"}>Golgari</MenuItem>
 										<MenuItem value={"Gruel"}>Gruel</MenuItem>
@@ -392,7 +393,11 @@ function CardResultsDialog({ isOpen, onClose, cards, fetchCards }: CardResultsDi
 											<Button
 												size="small"
 												variant="contained"
-												onClick={() => sendCardSelectedToDatabase(card)}
+												onClick={() => {
+													sendCardSelectedToDatabase(card)
+													fetchCards()
+												}
+												}
 											>
 												Add Card to Deck
 											</Button>

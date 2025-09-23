@@ -23,6 +23,7 @@ import com.example.MTG_Mox.advice.InvalidCommanderCardException;
 import com.example.MTG_Mox.model.AdvanceSearchCatalog;
 import com.example.MTG_Mox.model.Catalog;
 import com.example.MTG_Mox.model.Search;
+import com.example.MTG_Mox.model.TCG.Commander;
 import com.example.MTG_Mox.model.TCG.MagicCard;
 import com.example.MTG_Mox.service.CommanderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -103,6 +104,8 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		ObjectMapper objectMapper = new ObjectMapper();
 		MagicCard magicCard = objectMapper.readValue(response.body(), MagicCard.class);
+		Optional<Commander> commander = commanderService.getCurrentCommanderDeck(); 
+		commander.get().addCard(magicCard);
 	}
 
 	@Override

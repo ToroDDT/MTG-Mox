@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
 import CardGroupByType from "./CardGroupByType";
-import { ScryfallCard, CommanderDeckResponse, ListLayout } from "./types";
+import { ScryfallCard,  ListLayout } from "./types";
 
 type CardViewProps = {
 	listLayout: ListLayout

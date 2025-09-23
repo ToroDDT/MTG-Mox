@@ -49,7 +49,7 @@ function App() {
 					{/* Left side */}
 					<div className="flex space-x-2">
 						<AutoComplete setListLayout={setListLayout} />
-						<AdvanceSearch fetchCardDeck={}/>
+						<AdvanceSearch fetchCards={fetchCardDeck}/>
 					</div>
 
 					{/* Right side */}
