@@ -28,6 +28,8 @@ import com.example.MTG_Mox.model.TCG.MagicCard;
 import com.example.MTG_Mox.service.CommanderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.transaction.Transactional;
+
 @Component
 public class ScryFallApiClientImpl implements ScryFallApiClient {
 
@@ -36,26 +38,6 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
 	@Autowired
 	public ScryFallApiClientImpl(CommanderService commanderService) {
 		this.commanderService = commanderService;
-	}
-
-	private Boolean checkStringForPlusSign(StringBuilder stringBuilder) {
-		// check if string is empty, if the string is empty do not append a plus sign
-
-		Pattern pattern = Pattern.compile("+", Pattern.CASE_INSENSITIVE);
-		Matcher matcher = pattern.matcher(stringBuilder.toString());
-		boolean matchFound = matcher.find();
-		if (matchFound && stringBuilder.toString().isEmpty()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private Boolean checkIfStringIsEmpty(StringBuilder stringBuilder) {
-		if (stringBuilder.isEmpty()) {
-			return true;
-		} else
-			return false;
 	}
 
 	@Override
@@ -83,6 +65,7 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
 	}
 
 	@Override
+	@Transactional
 	public void addCardToCommanderDeck(String card)
 			throws IOException, InterruptedException, InvalidCommanderCardException {
 		if (card.isEmpty()) {
@@ -100,6 +83,7 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
 				.header("Accept", "application/json")
 				.header("User-Agent", "MTG-MOX-APP")
 				.build();
+		System.out.println(request);
 		// 3. Send the request and return the response body
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		ObjectMapper objectMapper = new ObjectMapper();
