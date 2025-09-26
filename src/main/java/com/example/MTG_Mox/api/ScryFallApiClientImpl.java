@@ -3,7 +3,6 @@ package com.example.MTG_Mox.api;
 import java.util.List;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Io;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
@@ -13,10 +12,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import javax.smartcardio.Card;
 
 import com.example.MTG_Mox.advice.CardDoesNotExistException;
 import com.example.MTG_Mox.advice.InvalidCommanderCardException;
@@ -83,7 +79,6 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
 				.header("Accept", "application/json")
 				.header("User-Agent", "MTG-MOX-APP")
 				.build();
-		System.out.println(request);
 		// 3. Send the request and return the response body
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		ObjectMapper objectMapper = new ObjectMapper();

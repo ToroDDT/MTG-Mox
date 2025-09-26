@@ -5,13 +5,16 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import useDebounce from './Hook';
-import { ListLayoutSetter } from './types';
 
 type AutoCompleteList = {
 	data: string[];
 };
 
-function AutoComplete({ setListLayout }: ListLayoutSetter) {
+type AutoCompleteProps = {
+	fetchCards: () => void
+}
+
+function AutoComplete({ fetchCards }: AutoCompleteProps) {
 	const [showDropdown, setShowDropdown] = useState(false);
 	const [input, setInput] = useState('');
 	const [cards, setCards] = useState<string[]>([]);
@@ -19,20 +22,45 @@ function AutoComplete({ setListLayout }: ListLayoutSetter) {
 	const [selectedIndex, setSelectedIndex] = useState(1);
 	const containerRef = useRef<HTMLDivElement>(null);
 
+	const handleAddCard = async (card: string) => {
+		try {
+			// Wait for the backend call to finish
+			await sendCardSelectedToDatabase(card);
+
+			// Only after it's done, fetch the updated deck
+			await fetchCards();
+		} catch (error) {
+			console.error("Error adding card or fetching deck:", error);
+		}
+	};
+
+	async function sendCardSelectedToDatabase(card: string) {
+		console.log("Form Submitted");
+		try {
+			const response = await fetch("http://localhost:8080/addCardToCommmaderDeck", {
+				method: "POST",
+				credentials: "include",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(card),
+			});
+
+			if (!response.ok) {
+				const errorText = await response.text();
+				throw new Error(`HTTP ${response.status} - ${errorText}`);
+			}
+		} catch (error) {
+			console.error("Failed to retrieve card data from advance search:", error);
+		}
+	}
+
 	const debouncedInput = useDebounce(input, 1000);
 
 	// Send card selection to backend
 	useEffect(() => {
-		if (!cardSelected) return;
-		const encodedValue = encodeURIComponent(cardSelected);
-		fetch('http://localhost:8080/addCardToCommmaderDeck?card=' + encodedValue, {
-			method: 'POST',
-		});
-		setListLayout(prev => ({
-			...prev,       // keep all the existing fields
-			card: cardSelected // update just card
-		}));
-	}, [cardSelected, setListLayout]);
+		handleAddCard(cardSelected)
+	}, [cardSelected]);
 
 	// Fetch autocomplete list
 	useEffect(() => {

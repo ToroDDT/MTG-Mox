@@ -47,7 +47,7 @@ function App() {
 				<div className="flex flex-row w-full justify-between">
 					{/* Left side */}
 					<div className="flex space-x-2">
-						<AutoComplete setListLayout={setListLayout} />
+						<AutoComplete  fetchCards={fetchCardDeck} />
 						<AdvanceSearch fetchCards={fetchCardDeck} />
 					</div>
 
