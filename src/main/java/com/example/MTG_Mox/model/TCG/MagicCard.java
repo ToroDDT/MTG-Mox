@@ -53,6 +53,7 @@ public class MagicCard {
 	@JsonProperty("type_line")
 	private String typeLine;
 	@JsonProperty("oracle_text")
+	@Lob
 	private String oracleText;
 
 	@ElementCollection
