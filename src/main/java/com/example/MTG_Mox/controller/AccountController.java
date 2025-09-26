@@ -16,6 +16,7 @@ import com.example.MTG_Mox.service.CommanderService;
 import com.example.MTG_Mox.service.PasswordResetService;
 import com.example.MTG_Mox.validate.EmailValidatorJavaImpl;
 import jakarta.mail.MessagingException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,7 +130,8 @@ public class AccountController {
 	}
 
 	@PostMapping("/addCardToCommmaderDeck")
-	public ResponseEntity<?> addCardToCommander(@RequestParam("card") String card) {
+	@Transactional
+	public ResponseEntity<?> addCardToCommander(@RequestBody String card) {
 		try {
 			scryFallApiClientImpl.addCardToCommanderDeck(card);
 
@@ -184,7 +186,7 @@ public class AccountController {
 		Optional<Commander> commander = commanderService.getCurrentCommanderDeck();
 		List<MagicCard> listOfCards = commander.get().getMagicCards();
 		Map<String, List<MagicCard>> responseData = new HashMap<>();
-		List<MagicCardDto> listOfCardDtos = magicCardWrapper 
+		List<MagicCardDto> listOfCardDtos = magicCardWrapper
 				.toDtoList(commander.get().getMagicCards());
 		responseData.put("data", listOfCards);
 		return new ResponseEntity<>(responseData, HttpStatus.OK);
