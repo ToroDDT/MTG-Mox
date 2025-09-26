@@ -18,15 +18,14 @@ function App() {
 	const [name, setName] = useState<string>("")
 	const [cards, setCards] = useState<ScryfallCard[]>([]);
 
-	const fetchCardDeck = () => {
-		fetch("http://localhost:8080/commander-deck", { method: "GET" })
-			.then((response) => response.json() as Promise<CommanderDeckResponse>)
-			.then((cardList) => {
-				setCards(cardList.data);
-			})
-			.catch((error) => {
-				console.error("Error fetching data:", error);
-			});
+	const fetchCardDeck = async () => {
+		try {
+			const response = await fetch("http://localhost:8080/commander-deck", { method: "GET" });
+			const cardList: CommanderDeckResponse = await response.json();
+			setCards(cardList.data); // update state with the latest deck
+		} catch (error) {
+			console.error("Error fetching data:", error);
+		}
 	};
 	useEffect(() => {
 		// Make the HTTP request when the component mounts
@@ -49,7 +48,7 @@ function App() {
 					{/* Left side */}
 					<div className="flex space-x-2">
 						<AutoComplete setListLayout={setListLayout} />
-						<AdvanceSearch fetchCards={fetchCardDeck}/>
+						<AdvanceSearch fetchCards={fetchCardDeck} />
 					</div>
 
 					{/* Right side */}

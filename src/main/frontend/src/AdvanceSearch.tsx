@@ -330,6 +330,17 @@ function AdvanceSearch({ fetchCards }: AdvanceSearchProps) {
 
 
 function CardResultsDialog({ isOpen, onClose, cards, fetchCards }: CardResultsDialogProps) {
+	const handleAddCard = async (card: CardAPI) => {
+		try {
+			// Wait for the backend call to finish
+			await sendCardSelectedToDatabase(card);
+
+			// Only after it's done, fetch the updated deck
+			await fetchCards();
+		} catch (error) {
+			console.error("Error adding card or fetching deck:", error);
+		}
+	};
 
 	async function sendCardSelectedToDatabase(card: CardAPI) {
 		console.log("Form Submitted");
@@ -340,7 +351,7 @@ function CardResultsDialog({ isOpen, onClose, cards, fetchCards }: CardResultsDi
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(card),
+				body: JSON.stringify(card.name),
 			});
 
 			if (!response.ok) {
@@ -394,8 +405,7 @@ function CardResultsDialog({ isOpen, onClose, cards, fetchCards }: CardResultsDi
 												size="small"
 												variant="contained"
 												onClick={() => {
-													sendCardSelectedToDatabase(card)
-													fetchCards()
+														handleAddCard(card)
 												}
 												}
 											>
