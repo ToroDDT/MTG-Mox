@@ -25,106 +25,97 @@ function CardGroupByType({ cards }: { cards: ScryfallCard[] }) {
   );
 }
 
-function Creatures({ cardList, editCardList }: CardListProps) {
-  const checkForCreatures = (cards: ScryfallCard[]) => {
-    // make a shallow copy of cards in order not to mutate prop value
-    let cardList = [...cards];
-    let revisedCardList: ScryfallCard[] = [];
-    let card;
-
-    // Create a loop that starts at the end of the array
-    // continues until the array length is zero
-    // if array length is zero return
-    for (let i = cardList.length - 1; i >= 0; i--) {
-      if (cardList.length == 0) {
-        return;
-      }
-      // store the pop value
-      card = cardList.pop()!;
-
-      revisedCardList.push(card);
-
-      //if pop value is equal to ..
-      if (card?.type_line.includes('Creature')) {
-        <div>
-          <div>Creatures ({cardList.length})</div>
-          {cardList.map((card) => (
-            <BasicList card={card.name} />
-          ))}
-        </div>;
-      }
-    }
-    editCardList(cardList);
-  };
-
-  return <>{checkForCreatures(cardList)}</>;
-}
-
 function Enchantments({ cardList, editCardList }: CardListProps) {
   const checkForEnchantments = (cards: ScryfallCard[]) => {
     // make a shallow copy of cards in order not to mutate prop value
     let cardList = [...cards];
     let revisedCardList: ScryfallCard[] = [];
-    let card;
+    let EnchantmentsList: ScryfallCard[] = [];
 
-    // Create a loop that starts at the end of the array
-    // continues until the array length is zero
-    // if array length is zero return
     for (let i = cardList.length - 1; i >= 0; i--) {
       if (cardList.length == 0) {
         return;
       }
-      // store the pop value
-      card = cardList.pop()!;
 
-      revisedCardList.push(card);
-
-      //if pop value is equal to ..
-      if (card?.type_line.includes('Enchantment')) {
-        <div>
-          <div>Enchantments ({cardList.length})</div>
-          {cardList.map((card) => (
-            <BasicList card={card.name} />
-          ))}
-        </div>;
+      if (cardList[i].type_line.includes('Enchantment')) {
+        let card = cardList.pop()!;
+        EnchantmentsList.push(card);
+      } else {
+        let card = cardList.pop()!;
+        revisedCardList.push(card);
       }
     }
-    editCardList(cardList);
+
+    editCardList(revisedCardList);
+
+    return (
+      <div>
+        <div>Enchantments ({EnchantmentsList.length})</div>
+        {EnchantmentsList.map((card) => (
+          <BasicList card={card.name} />
+        ))}
+      </div>
+    );
   };
 
   return <>{checkForEnchantments(cardList)}</>;
 }
 
-function Artifacts({ cardList, editCardList }: CardListProps) {
-  const checkForArtifacts = (cards: ScryfallCard[]) => {
-    // make a shallow copy of cards in order not to mutate prop value
+function Creatures({ cardList, editCardList }: CardListProps) {
+  const checkForCreatures = (cards: ScryfallCard[]) => {
     let cardList = [...cards];
     let revisedCardList: ScryfallCard[] = [];
-    let card;
+    let creaturesList: ScryfallCard[] = [];
 
-    // Create a loop that starts at the end of the array
-    // continues until the array length is zero
-    // if array length is zero return
     for (let i = cardList.length - 1; i >= 0; i--) {
-      if (cardList.length == 0) {
-        return;
-      }
-      // store the pop value
-      card = cardList.pop()!;
-
-      revisedCardList.push(card);
-
-      //if pop value is equal to ..
-      if (card?.type_line.includes('Artifact')) {
-        <div>
-          <div>Artifacts ({cardList.length})</div>
-          {cardList.map((card) => (
-            <BasicList card={card.name} />
-          ))}
-        </div>;
+      const card = cardList.pop()!;
+      if (card.type_line.includes('Creature')) {
+        creaturesList.push(card);
+      } else {
+        revisedCardList.push(card);
       }
     }
-    editCardList(cardList);
+
+    editCardList(revisedCardList);
+
+    return (
+      <div>
+        <div>Creatures ({creaturesList.length})</div>
+        {creaturesList.map((card) => (
+          <BasicList key={card.id} card={card.name} />
+        ))}
+      </div>
+    );
+  };
+
+  return <>{checkForCreatures(cardList)}</>;
+}
+
+function Artifacts({ cardList, editCardList }: CardListProps) {
+  const checkForArtifacts = (cards: ScryfallCard[]) => {
+    let cardList = [...cards];
+    let revisedCardList: ScryfallCard[] = [];
+    let artifactsList: ScryfallCard[] = [];
+
+    for (let i = cardList.length - 1; i >= 0; i--) {
+      const card = cardList.pop()!;
+      if (card.type_line.includes('Artifact')) {
+        artifactsList.push(card);
+      } else {
+        revisedCardList.push(card);
+      }
+    }
+
+    editCardList(revisedCardList);
+
+    return (
+      <div>
+        <div>Artifacts ({artifactsList.length})</div>
+        {artifactsList.map((card) => (
+          <BasicList key={card.id} card={card.name} />
+        ))}
+      </div>
+    );
   };
 
   return <>{checkForArtifacts(cardList)}</>;
@@ -132,71 +123,61 @@ function Artifacts({ cardList, editCardList }: CardListProps) {
 
 function Sorceries({ cardList, editCardList }: CardListProps) {
   const checkForSorceries = (cards: ScryfallCard[]) => {
-    // make a shallow copy of cards in order not to mutate prop value
     let cardList = [...cards];
     let revisedCardList: ScryfallCard[] = [];
-    let card;
+    let sorceriesList: ScryfallCard[] = [];
 
-    // Create a loop that starts at the end of the array
-    // continues until the array length is zero
-    // if array length is zero return
     for (let i = cardList.length - 1; i >= 0; i--) {
-      if (cardList.length == 0) {
-        return;
-      }
-      // store the pop value
-      card = cardList.pop()!;
-
-      revisedCardList.push(card);
-
-      //if pop value is equal to ..
-      if (card?.type_line.includes('Sorcery')) {
-        <div>
-          <div>Sorceries ({cardList.length})</div>
-          {cardList.map((card) => (
-            <BasicList card={card.name} />
-          ))}
-        </div>;
+      const card = cardList.pop()!;
+      if (card.type_line.includes('Sorcery')) {
+        sorceriesList.push(card);
+      } else {
+        revisedCardList.push(card);
       }
     }
-    editCardList(cardList);
+
+    editCardList(revisedCardList);
+
+    return (
+      <div>
+        <div>Sorceries ({sorceriesList.length})</div>
+        {sorceriesList.map((card) => (
+          <BasicList key={card.id} card={card.name} />
+        ))}
+      </div>
+    );
   };
+
   return <>{checkForSorceries(cardList)}</>;
 }
 
 function Instants({ cardList, editCardList }: CardListProps) {
   const checkForInstants = (cards: ScryfallCard[]) => {
-    // make a shallow copy of cards in order not to mutate prop value
     let cardList = [...cards];
     let revisedCardList: ScryfallCard[] = [];
-    let card;
+    let instantsList: ScryfallCard[] = [];
 
-    // Create a loop that starts at the end of the array
-    // continues until the array length is zero
-    // if array length is zero return
     for (let i = cardList.length - 1; i >= 0; i--) {
-      if (cardList.length == 0) {
-        return;
-      }
-      // store the pop value
-      card = cardList.pop()!;
-
-      revisedCardList.push(card);
-
-      //if pop value is equal to ..
-      if (card?.type_line.includes('Instant')) {
-        <div>
-          <div>Instants ({cardList.length})</div>
-          {cardList.map((card) => (
-            <BasicList card={card.name} />
-          ))}
-        </div>;
+      const card = cardList.pop()!;
+      if (card.type_line.includes('Instant')) {
+        instantsList.push(card);
+      } else {
+        revisedCardList.push(card);
       }
     }
-    editCardList(cardList);
+
+    editCardList(revisedCardList);
+
+    return (
+      <div>
+        <div>Instants ({instantsList.length})</div>
+        {instantsList.map((card) => (
+          <BasicList key={card.id} card={card.name} />
+        ))}
+      </div>
+    );
   };
 
   return <>{checkForInstants(cardList)}</>;
 }
-
 export default CardGroupByType;
