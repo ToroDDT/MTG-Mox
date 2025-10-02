@@ -1,50 +1,47 @@
 package com.example.MTG_Mox.config;
 
-import com.example.MTG_Mox.service.JpaUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.List;
 
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfig {
-    private final JpaUserDetailsService jpaUserDetailsService;
 
-    public WebSecurityConfig(JpaUserDetailsService jpaUserDetailsService) {
-        this.jpaUserDetailsService = jpaUserDetailsService;
-    }
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    return http
+        .csrf(AbstractHttpConfigurer::disable)
+        .cors(Customizer.withDefaults()) // ✅ Enable CORS
+        .authorizeHttpRequests(auth -> auth
+            .anyRequest().permitAll())
+        .headers(headers -> headers.frameOptions().sameOrigin())
+        .build();
+  }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login.css", "/h2-console/**", "/main.css", "/forgot-password").permitAll()
-                        .anyRequest().authenticated()
+  // ✅ Define global CORS configuration
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
 
-                )
-                .csrf(AbstractHttpConfigurer::disable)
-                .userDetailsService(jpaUserDetailsService)
-                .headers(headers -> headers.frameOptions().sameOrigin())
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .permitAll())
+    // Allow the origin where your React app runs
+    configuration.setAllowedOrigins(List.of("http://localhost:5173")); // change if needed
 
-                .build();
-    }
+    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    configuration.setAllowedHeaders(List.of("*"));
+    configuration.setAllowCredentials(true); // optional, only if needed (cookies, auth)
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration); // apply to all paths
+    return source;
+  }
 }
