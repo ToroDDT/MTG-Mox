@@ -11,7 +11,9 @@ import com.example.MTG_Mox.model.Search;
 import com.example.MTG_Mox.model.User;
 import com.example.MTG_Mox.model.TCG.Commander;
 import com.example.MTG_Mox.model.TCG.MagicCard;
+
 import com.example.MTG_Mox.service.AccountService;
+import com.example.MTG_Mox.service.CardsService;
 import com.example.MTG_Mox.service.CommanderService;
 import com.example.MTG_Mox.service.PasswordResetService;
 import com.example.MTG_Mox.validate.EmailValidatorJavaImpl;
@@ -47,17 +49,19 @@ public class AccountController {
   private final EmailValidatorJavaImpl emailValidatorJavaImpl;
   private final CommanderService commanderService;
   private final AccountService accountService;
+  private final CardsService cardsService;
 
   @Autowired
   public AccountController(PasswordResetService passwordResetService, ScryFallApiClientImpl scryFallApiClientImpl,
       CommanderService commanderService, MagicCardWrapper magicCardWrapper,
-      AccountService accountService, EmailValidatorJavaImpl emailValidatorJavaImpl) {
+      AccountService accountService, EmailValidatorJavaImpl emailValidatorJavaImpl, CardsService cardsService) {
     this.passwordResetService = passwordResetService;
     this.scryFallApiClientImpl = scryFallApiClientImpl;
     this.commanderService = commanderService;
     this.magicCardWrapper = magicCardWrapper;
     this.accountService = accountService;
     this.emailValidatorJavaImpl = emailValidatorJavaImpl;
+    this.cardsService = cardsService;
   }
 
   @GetMapping("/home")
@@ -188,6 +192,11 @@ public class AccountController {
         .toDtoList(commander.get().getMagicCards());
     responseData.put("data", listOfCards);
     return new ResponseEntity<>(responseData, HttpStatus.OK);
+  }
+
+  @DeleteMapping("/deletecardfromcommanderdeck")
+  public ResponseEntity<?> deleteCardFromCommanderDeck(@RequestParam("CardName") String cardname) {
+
   }
 
 }
