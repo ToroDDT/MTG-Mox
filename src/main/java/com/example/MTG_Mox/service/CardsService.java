@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.MTG_Mox.model.TCG.MagicCard;
 import com.example.MTG_Mox.repo.CardRepository;
 
-class CardsService {
+public class CardsService {
 
   private final CardRepository cardRepository;
 

@@ -30,9 +30,6 @@ public class MtgMoxApplication {
 
     // Create a new card to add
     MagicCard magicCard = new MagicCard();
-    magicCard.setName("austere command");
-    magicCard.setCommander(newCommander);
-    newCommander.addCard(magicCard);
     return args -> {
       commanderRepository.save(newCommander);
     };
