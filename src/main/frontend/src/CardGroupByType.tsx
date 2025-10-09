@@ -4,196 +4,93 @@ import { ScryfallCard } from './types';
 
 interface CardListProps {
   cardList: ScryfallCard[];
-  editCardList: (revisedCardList: ScryfallCard[]) => void;
 }
 
 function CardGroupByType({ cards }: { cards: ScryfallCard[] }) {
-  const [cardList, setCardList] = useState<ScryfallCard[]>([]);
+  const [creatures, setCreatures] = useState<ScryfallCard[]>([]);
+  const [enchantments, setEnchantments] = useState<ScryfallCard[]>([]);
+  const [artifacts, setArtifacts] = useState<ScryfallCard[]>([]);
+  const [instants, setInstants] = useState<ScryfallCard[]>([]);
+  const [sorceries, setSorceries] = useState<ScryfallCard[]>([]);
 
   useEffect(() => {
-    setCardList(cards);
-  }, [cards]);
+    if (!cards || cards.length === 0) return;
 
-  const editCardList = (revisedCardList: ScryfallCard[]) => {
-    setCardList(revisedCardList);
-  };
+    setCreatures(cards.filter((card) => card.type_line.includes('Creature')));
+    setEnchantments(
+      cards.filter((card) => card.type_line.includes('Enchantment')),
+    );
+    setArtifacts(cards.filter((card) => card.type_line.includes('Artifact')));
+    setInstants(cards.filter((card) => card.type_line.includes('Instant')));
+    setSorceries(cards.filter((card) => card.type_line.includes('Sorcery')));
+  }, [cards]);
 
   return (
     <>
-      <Creatures cardList={cardList} editCardList={editCardList} />
-      <Enchantments cardList={cardList} editCardList={editCardList} />
-      <Artifacts cardList={cardList} editCardList={editCardList} />
-      <Instants cardList={cardList} editCardList={editCardList} />
-      <Sorceries cardList={cardList} editCardList={editCardList} />
+      <Creatures cardList={creatures} />
+      <Enchantments cardList={enchantments} />
+      <Artifacts cardList={artifacts} />
+      <Instants cardList={instants} />
+      <Sorceries cardList={sorceries} />
     </>
   );
 }
-function Enchantments({ cardList, editCardList }: CardListProps) {
-  const [enchantmentsList, setEnchantmentsList] = useState<ScryfallCard[]>([]);
 
-  useEffect(() => {
-    const originalList = [...cardList];
-    const revisedList: ScryfallCard[] = [];
-    const matchedList: ScryfallCard[] = [];
-
-    for (let i = originalList.length - 1; i >= 0; i--) {
-      if (originalList.length == 0) {
-        return;
-      }
-      let card = originalList.pop()!;
-      if (card.type_line.includes('Enchantment')) {
-        matchedList.push(card);
-      } else {
-        revisedList.push(card);
-      }
-    }
-    editCardList(revisedList);
-
-    setEnchantmentsList(matchedList); // ✅ Local state for rendering
-  }, []);
-
+function Enchantments({ cardList }: CardListProps) {
   return (
     <div>
-      <div>Enchantments ({enchantmentsList.length})</div>
-      {enchantmentsList.map((card) => (
+      <div>Enchantments ({cardList.length})</div>
+      {cardList.map((card) => (
         <BasicList key={card.id} card={card.name} />
       ))}
     </div>
   );
 }
 
-function Creatures({ cardList, editCardList }: CardListProps) {
-  const [creaturesList, setCreaturesList] = useState<ScryfallCard[]>([]);
-
-  useEffect(() => {
-    const originalList = [...cardList];
-    const revisedList: ScryfallCard[] = [];
-    const matchedList: ScryfallCard[] = [];
-
-    for (let i = originalList.length - 1; i >= 0; i--) {
-      if (originalList.length == 0) {
-        return;
-      }
-      let card = originalList.pop()!;
-      if (card.type_line.includes('Creature')) {
-        matchedList.push(card);
-      } else {
-        revisedList.push(card);
-      }
-    }
-    editCardList(revisedList);
-
-    setCreaturesList(matchedList);
-  }, []);
-
+function Creatures({ cardList }: CardListProps) {
   return (
     <div>
-      <div>Creatures ({creaturesList.length})</div>
-      {creaturesList.map((card) => (
+      <div>Creatures ({cardList.length})</div>
+      {cardList.map((card) => (
         <BasicList key={card.id} card={card.name} />
       ))}
     </div>
   );
 }
 
-function Artifacts({ cardList, editCardList }: CardListProps) {
-  const [artifactsList, setArtifactsList] = useState<ScryfallCard[]>([]);
-
-  useEffect(() => {
-    const originalList = [...cardList];
-    const revisedList: ScryfallCard[] = [];
-    const matchedList: ScryfallCard[] = [];
-
-    for (let i = originalList.length - 1; i >= 0; i--) {
-      if (originalList.length == 0) {
-        return;
-      }
-      let card = originalList.pop()!;
-      if (card.type_line.includes('Artifact')) {
-        matchedList.push(card);
-      } else {
-        revisedList.push(card);
-      }
-    }
-    editCardList(revisedList);
-
-    setArtifactsList(matchedList);
-  }, []);
-
+function Artifacts({ cardList }: CardListProps) {
   return (
     <div>
-      <div>Artifacts ({artifactsList.length})</div>
-      {artifactsList.map((card) => (
+      <div>Artifacts ({cardList.length})</div>
+      {cardList.map((card) => (
         <BasicList key={card.id} card={card.name} />
       ))}
     </div>
   );
 }
 
-function Sorceries({ cardList, editCardList }: CardListProps) {
-  const [sorceriesList, setSorceriesList] = useState<ScryfallCard[]>([]);
-
-  useEffect(() => {
-    const originalList = [...cardList];
-    const revisedList: ScryfallCard[] = [];
-    const matchedList: ScryfallCard[] = [];
-
-    for (let i = originalList.length - 1; i >= 0; i--) {
-      if (originalList.length == 0) {
-        return;
-      }
-      const card = originalList.pop()!;
-      if (card.type_line.includes('Sorcery')) {
-        matchedList.push(card);
-      } else {
-        revisedList.push(card);
-      }
-    }
-
-    editCardList(revisedList);
-    setSorceriesList(matchedList);
-  }, []);
-
+function Sorceries({ cardList }: CardListProps) {
   return (
     <div>
-      <div>Sorceries ({sorceriesList.length})</div>
-      {sorceriesList.map((card) => (
+      <div>Sorceries ({cardList.length})</div>
+      {cardList.map((card) => (
         <BasicList key={card.id} card={card.name} />
       ))}
     </div>
   );
 }
-function Instants({ cardList, editCardList }: CardListProps) {
-  const [instantsList, setInstantsList] = useState<ScryfallCard[]>([]);
 
-  useEffect(() => {
-    const originalList = [...cardList];
-    const revisedList: ScryfallCard[] = [];
-    const matchedList: ScryfallCard[] = [];
-
-    for (let i = originalList.length - 1; i >= 0; i--) {
-      if (originalList.length == 0) {
-        return;
-      }
-      const card = originalList.pop()!;
-      if (card.type_line.includes('Instant')) {
-        matchedList.push(card);
-      } else {
-        revisedList.push(card);
-      }
-    }
-
-    editCardList(revisedList);
-    setInstantsList(matchedList);
-  }, []);
-
+function Instants({ cardList }: CardListProps) {
   return (
     <div>
-      <div>Instants ({instantsList.length})</div>
-      {instantsList.map((card) => (
+      <div>Instants ({cardList.length})</div>
+      {cardList.map((card) => (
         <BasicList key={card.id} card={card.name} />
       ))}
     </div>
   );
 }
+
+export default CardGroupByType;
+
 export default CardGroupByType;
