@@ -1,12 +1,12 @@
 package com.example.MTG_Mox.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.MTG_Mox.model.TCG.MagicCard;
 import com.example.MTG_Mox.repo.CardRepository;
 
+@Service
 public class CardsService {
 
   private final CardRepository cardRepository;

@@ -62,6 +62,7 @@ public class AccountController {
     this.accountService = accountService;
     this.emailValidatorJavaImpl = emailValidatorJavaImpl;
     this.cardsService = cardsService;
+
   }
 
   @GetMapping("/home")
@@ -192,11 +193,6 @@ public class AccountController {
         .toDtoList(commander.get().getMagicCards());
     responseData.put("data", listOfCards);
     return new ResponseEntity<>(responseData, HttpStatus.OK);
-  }
-
-  @DeleteMapping("/deletecardfromcommanderdeck")
-  public ResponseEntity<?> deleteCardFromCommanderDeck(@RequestParam("CardName") String cardname) {
-
   }
 
 }
