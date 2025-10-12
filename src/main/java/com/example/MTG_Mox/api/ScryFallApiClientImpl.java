@@ -13,6 +13,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 
+import com.example.MTG_Mox.Cache.CardCache;
 import com.example.MTG_Mox.advice.CardDoesNotExistException;
 import com.example.MTG_Mox.advice.InvalidCommanderCardException;
 import com.example.MTG_Mox.model.AdvanceSearchCatalog;
@@ -31,11 +32,13 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
 
   private final CommanderService commanderService;
   private final CardsService cardsService;
+  private final CardCache cardCache;
 
   @Autowired
-  public ScryFallApiClientImpl(CommanderService commanderService, CardsService cardsService) {
+  public ScryFallApiClientImpl(CommanderService commanderService, CardsService cardsService, CardCache cardCache) {
     this.commanderService = commanderService;
     this.cardsService = cardsService;
+    this.cardCache = cardCache;
   }
 
   @Override
@@ -73,38 +76,63 @@ public class ScryFallApiClientImpl implements ScryFallApiClient {
 
     String encodedName = URLEncoder.encode(card, StandardCharsets.UTF_8);
 
-    // 1. Fetch card from Scryfall
-    HttpClient client = HttpClient.newHttpClient();
-    HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create("https://api.scryfall.com/cards/named?exact=" + encodedName))
-        .GET()
-        .header("Accept", "application/json")
-        .header("User-Agent", "MTG-MOX-APP")
-        .build();
+    if (cardCache.contains(card)) {
+      MagicCard magicCard = cardCache.get(card);
+      Commander commanderDeck = commanderService.getCurrentCommanderDeck()
+          .orElseThrow(InvalidCommanderCardException::new);
 
-    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-    ObjectMapper objectMapper = new ObjectMapper();
-    MagicCard magicCard = objectMapper.readValue(response.body(), MagicCard.class);
-
-    // 2. Get commander deck safely
-    Commander commanderObj = commanderService.getCurrentCommanderDeck()
-        .orElseThrow(InvalidCommanderCardException::new);
-
-    // 3. Check if card exists in the deck
-    boolean found = false;
-    for (MagicCard cardObject : commanderObj.getMagicCards()) {
-      if (cardObject.getName().equals(magicCard.getName())) {
-        // Increment total if already exists
-        cardObject.setTotal(cardObject.getTotal() + 1);
-        cardsService.incrementCardAmount(cardObject);
-        found = true;
-        break; // stop looping since we found it
+      // 3. Check if card exists in the deck
+      boolean found = false;
+      for (MagicCard cardObject : commanderDeck.getMagicCards()) {
+        if (cardObject.getName().equals(magicCard.getName())) {
+          // Increment total if already exists
+          cardObject.setTotal(cardObject.getTotal() + 1);
+          cardsService.incrementCardAmount(cardObject);
+          found = true;
+          break; // stop looping since we found it
+        }
       }
-    }
 
-    // 4. Add new card if not found
-    if (!found) {
-      commanderObj.addCard(magicCard);
+      // 4. Add new card if not found
+      if (!found) {
+        commanderDeck.addCard(magicCard);
+      }
+    } else {
+
+      // 1. Fetch card from Scryfall
+      HttpClient client = HttpClient.newHttpClient();
+      HttpRequest request = HttpRequest.newBuilder()
+          .uri(URI.create("https://api.scryfall.com/cards/named?exact=" + encodedName))
+          .GET()
+          .header("Accept", "application/json")
+          .header("User-Agent", "MTG-MOX-APP")
+          .build();
+
+      HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+      ObjectMapper objectMapper = new ObjectMapper();
+      MagicCard magicCard = objectMapper.readValue(response.body(), MagicCard.class);
+
+      cardCache.putIfAbsent(card, magicCard);
+      // 2. Get commander deck safely
+      Commander commanderObj = commanderService.getCurrentCommanderDeck()
+          .orElseThrow(InvalidCommanderCardException::new);
+
+      // 3. Check if card exists in the deck
+      boolean found = false;
+      for (MagicCard cardObject : commanderObj.getMagicCards()) {
+        if (cardObject.getName().equals(magicCard.getName())) {
+          // Increment total if already exists
+          cardObject.setTotal(cardObject.getTotal() + 1);
+          cardsService.incrementCardAmount(cardObject);
+          found = true;
+          break; // stop looping since we found it
+        }
+      }
+
+      // 4. Add new card if not found
+      if (!found) {
+        commanderObj.addCard(magicCard);
+      }
     }
   }
 
