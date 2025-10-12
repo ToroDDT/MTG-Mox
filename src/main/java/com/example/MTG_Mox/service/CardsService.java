@@ -18,6 +18,10 @@ public class CardsService {
     this.cardRepository = cardRepository;
   }
 
+  public void incrementCardAmount(MagicCard magicCard) {
+    cardRepository.save(magicCard);
+  }
+
   public void deleteCardFromDeck(String name) {
 
     MagicCard card = cardRepository.findByName(name).orElseThrow(() -> new RuntimeException("Card does not exist"));
