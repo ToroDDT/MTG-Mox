@@ -194,9 +194,4 @@ public class AccountController {
     return new ResponseEntity<>(responseData, HttpStatus.OK);
   }
 
-  @DeleteMapping("/deletecardfromcommanderdeck")
-  public ResponseEntity<?> deleteCardFromCommanderDeck(@RequestParam("CardName") String cardname) {
-
-  }
-
 }

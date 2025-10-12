@@ -92,5 +92,3 @@ function Instants({ cardList }: CardListProps) {
 }
 
 export default CardGroupByType;
-
-export default CardGroupByType;
