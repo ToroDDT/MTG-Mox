@@ -12,6 +12,7 @@ function CardGroupByType({ cards }: { cards: ScryfallCard[] }) {
   const [artifacts, setArtifacts] = useState<ScryfallCard[]>([]);
   const [instants, setInstants] = useState<ScryfallCard[]>([]);
   const [sorceries, setSorceries] = useState<ScryfallCard[]>([]);
+  const [lands, setLands] = useState<ScryfallCard[]>([]);
 
   useEffect(() => {
     if (!cards || cards.length === 0) return;
@@ -23,15 +24,17 @@ function CardGroupByType({ cards }: { cards: ScryfallCard[] }) {
     setArtifacts(cards.filter((card) => card.type_line.includes('Artifact')));
     setInstants(cards.filter((card) => card.type_line.includes('Instant')));
     setSorceries(cards.filter((card) => card.type_line.includes('Sorcery')));
+    setLands(cards.filter((card) => card.type_line.includes('Land')));
   }, [cards]);
 
   return (
-    <div className="flex flex-row gap-20">
+    <div className="flex flex-row gap-20 ml-140">
       <Creatures cardList={creatures} />
       <Enchantments cardList={enchantments} />
       <Instants cardList={instants} />
       <Sorceries cardList={sorceries} />
       <Artifacts cardList={artifacts} />
+      <Lands cardList={lands} />
     </div>
   );
 }
@@ -100,5 +103,16 @@ function Instants({ cardList }: CardListProps) {
     </div>
   );
 }
-
+function Lands({ cardList }: CardListProps) {
+  return (
+    <div className="mb-4">
+      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
+        Lands ({cardList.length})
+      </div>
+      {cardList.map((card) => (
+        <BasicList key={card.id} card={card.name} total={card.total} />
+      ))}
+    </div>
+  );
+}
 export default CardGroupByType;

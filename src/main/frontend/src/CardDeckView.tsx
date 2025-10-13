@@ -1,23 +1,22 @@
-import CardGroupByType from "./CardGroupByType";
-import { ScryfallCard,  ListLayout } from "./types";
+import CardGroupByType from './CardGroupByType';
+import { ScryfallCard, ListLayout } from './types';
 
 type CardViewProps = {
-	listLayout: ListLayout
-	cards: ScryfallCard[]
-}
+  listLayout: ListLayout;
+  cards: ScryfallCard[];
+};
 
-
-function CardDeckView({ listLayout, cards }: CardViewProps,) {
-		if (listLayout.group == "Type") {
-		return (<CardGroupByType cards={cards} />)
-	}
+function CardDeckView({ listLayout, cards }: CardViewProps) {
+  if (listLayout.group == 'Type') {
+    return <CardGroupByType cards={cards} />;
+  }
 }
 
 export default CardDeckView;
 
-// How do i make to seperate child elements effect one another 
-// one child componenet makes a change to the database 
-// I want the other child element to update its component after the othe child component makes the update 
-// How do i make one component trigger another component 
+// How do i make to seperate child elements effect one another
+// one child componenet makes a change to the database
+// I want the other child element to update its component after the othe child component makes the update
+// How do i make one component trigger another component
 // I can Have a parent component be responsible for that
-// Have the parent component have the fetch function and pass the the values to the child component 
+// Have the parent component have the fetch function and pass the the values to the child component
