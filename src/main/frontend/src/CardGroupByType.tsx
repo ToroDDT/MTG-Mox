@@ -26,22 +26,24 @@ function CardGroupByType({ cards }: { cards: ScryfallCard[] }) {
   }, [cards]);
 
   return (
-    <>
+    <div className="flex flex-row gap-20">
       <Creatures cardList={creatures} />
       <Enchantments cardList={enchantments} />
-      <Artifacts cardList={artifacts} />
       <Instants cardList={instants} />
       <Sorceries cardList={sorceries} />
-    </>
+      <Artifacts cardList={artifacts} />
+    </div>
   );
 }
 
 function Enchantments({ cardList }: CardListProps) {
   return (
-    <div>
-      <div>Enchantments ({cardList.length})</div>
+    <div className="mb-4">
+      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
+        Enchantments ({cardList.length})
+      </div>
       {cardList.map((card) => (
-        <BasicList key={card.id} card={card.name} />
+        <BasicList key={card.id} card={card.name} total={card.total} />
       ))}
     </div>
   );
@@ -49,10 +51,12 @@ function Enchantments({ cardList }: CardListProps) {
 
 function Creatures({ cardList }: CardListProps) {
   return (
-    <div>
-      <div>Creatures ({cardList.length})</div>
+    <div className="mb-4">
+      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
+        Creatures ({cardList.length})
+      </div>
       {cardList.map((card) => (
-        <BasicList key={card.id} card={card.name} />
+        <BasicList key={card.id} card={card.name} total={card.total} />
       ))}
     </div>
   );
@@ -60,10 +64,12 @@ function Creatures({ cardList }: CardListProps) {
 
 function Artifacts({ cardList }: CardListProps) {
   return (
-    <div>
-      <div>Artifacts ({cardList.length})</div>
+    <div className="mb-4">
+      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
+        Artifacts ({cardList.length})
+      </div>
       {cardList.map((card) => (
-        <BasicList key={card.id} card={card.name} />
+        <BasicList key={card.id} card={card.name} total={card.total} />
       ))}
     </div>
   );
@@ -71,10 +77,12 @@ function Artifacts({ cardList }: CardListProps) {
 
 function Sorceries({ cardList }: CardListProps) {
   return (
-    <div>
-      <div>Sorceries ({cardList.length})</div>
+    <div className="mb-4">
+      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
+        Sorceries ({cardList.length})
+      </div>
       {cardList.map((card) => (
-        <BasicList key={card.id} card={card.name} />
+        <BasicList key={card.id} card={card.name} total={card.total} />
       ))}
     </div>
   );
@@ -82,10 +90,12 @@ function Sorceries({ cardList }: CardListProps) {
 
 function Instants({ cardList }: CardListProps) {
   return (
-    <div>
-      <div>Instants ({cardList.length})</div>
+    <div className="mb-4">
+      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
+        Instants ({cardList.length})
+      </div>
       {cardList.map((card) => (
-        <BasicList key={card.id} card={card.name} />
+        <BasicList key={card.id} card={card.name} total={card.total} />
       ))}
     </div>
   );
