@@ -1,6 +1,7 @@
 package com.example.MTG_Mox.controller;
 
 import com.example.MTG_Mox.MagicCardWrapper;
+import com.example.MTG_Mox.Cache.SearchCache;
 import com.example.MTG_Mox.advice.CardDoesNotExistException;
 import com.example.MTG_Mox.advice.EmailDoesNotExistException;
 import com.example.MTG_Mox.advice.ErrorDetails;
@@ -50,11 +51,14 @@ public class AccountController {
   private final CommanderService commanderService;
   private final AccountService accountService;
   private final CardsService cardsService;
+  private final SearchCache searchCache;
 
   @Autowired
-  public AccountController(PasswordResetService passwordResetService, ScryFallApiClientImpl scryFallApiClientImpl,
+  public AccountController(SearchCache searchCache, PasswordResetService passwordResetService,
+      ScryFallApiClientImpl scryFallApiClientImpl,
       CommanderService commanderService, MagicCardWrapper magicCardWrapper,
       AccountService accountService, EmailValidatorJavaImpl emailValidatorJavaImpl, CardsService cardsService) {
+    this.searchCache = searchCache;
     this.passwordResetService = passwordResetService;
     this.scryFallApiClientImpl = scryFallApiClientImpl;
     this.commanderService = commanderService;
@@ -66,6 +70,7 @@ public class AccountController {
 
   @GetMapping("/home")
   public String showHome() {
+
     return "home";
   }
 
@@ -117,7 +122,14 @@ public class AccountController {
     List<String> cardList = new ArrayList<>();
     String encodedValue = URLEncoder.encode(card, StandardCharsets.UTF_8.toString());
     try {
-      cardList = scryFallApiClientImpl.searchCard(encodedValue);
+      if (searchCache.contains(card)) {
+        cardList = searchCache.get(card);
+      } else {
+
+        cardList = scryFallApiClientImpl.searchCard(encodedValue);
+        searchCache.putIfAbsent(card, cardList);
+
+      }
     } catch (CardDoesNotExistException e) {
       ErrorDetails errorDetails = new ErrorDetails();
       errorDetails.setMessage("Card does not exist in scryfall api...");
