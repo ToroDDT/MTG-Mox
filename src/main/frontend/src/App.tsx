@@ -6,6 +6,7 @@ import AdvanceSearch from './AdvanceSearch';
 import CardGallery from './CardGallery';
 import { ListLayout, ScryfallCard, CommanderDeckResponse } from './types';
 import CardDeckView from './CardDeckView';
+import DeckFooter from './DeckFooter';
 
 interface UserResponse {
   commander: string;
@@ -65,6 +66,7 @@ function App() {
         </div>
       </div>
       <CardDeckView listLayout={listlayout} cards={cards} />
+      <DeckFooter />
     </>
   );
 }
