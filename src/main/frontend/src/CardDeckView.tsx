@@ -4,7 +4,7 @@ import { ScryfallCard, ListLayout } from './types';
 type CardViewProps = {
   listLayout: ListLayout;
   cards: ScryfallCard[];
-  setCard: React.Dispatch<React.SetStateAction<ScryfallCard | undefined>>;
+  setCard: React.Dispatch<React.SetStateAction<ScryfallCard>>;
 };
 
 function CardDeckView({ listLayout, cards, setCard }: CardViewProps) {

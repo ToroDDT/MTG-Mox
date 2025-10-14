@@ -68,7 +68,7 @@ function App() {
       <div className="flex flex-col text-left w-full">
         <div className="flex flex-row w-full justify-between">
           {/* Left side */}
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 ml-3">
             <AutoComplete fetchCards={fetchCardDeck} />
             <AdvanceSearch fetchCards={fetchCardDeck} />
           </div>
@@ -79,12 +79,11 @@ function App() {
           </div>
         </div>
       </div>
-      <div className="flex flex-row">
+      <div className="flex flex-row ml-5">
         <div>
           <MainCardView card={card} />
           <CardActions card={card} />
         </div>
-
         <CardDeckView listLayout={listlayout} cards={cards} setCard={setCard} />
       </div>
       <DeckFooter deck={deckInformation} />

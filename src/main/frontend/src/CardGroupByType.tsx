@@ -29,13 +29,21 @@ function CardGroupByType({ cards, setCard }: CardListProps) {
   }, [cards]);
 
   return (
-    <div className="flex flex-row gap-20 ml-100">
-      <Creatures cards={creatures} setCard={setCard} />
-      <Enchantments cards={enchantments} setCard={setCard} />
-      <Instants cards={instants} setCard={setCard} />
-      <Sorceries cards={sorceries} setCard={setCard} />
-      <Artifacts cards={artifacts} setCard={setCard} />
-      <Lands cards={lands} setCard={setCard} />
+    <div className="flex flex-col md:flex-row flex-wrap gap-20 md:gap-10 ml-40 md:ml-60 items-start">
+      <div className="flex flex-row gap-10 justify-center md:flex-col">
+        <Creatures cards={creatures} setCard={setCard} />
+        <Artifacts cards={artifacts} setCard={setCard} />
+      </div>
+
+      <div className="flex flex-row gap-10 justify-center md:flex-col">
+        <Enchantments cards={enchantments} setCard={setCard} />
+        <Instants cards={instants} setCard={setCard} />
+      </div>
+
+      <div className="flex flex-row gap-10 justify-center md:flex-col">
+        <Sorceries cards={sorceries} setCard={setCard} />
+        <Lands cards={lands} setCard={setCard} />
+      </div>
     </div>
   );
 }
@@ -43,8 +51,8 @@ function CardGroupByType({ cards, setCard }: CardListProps) {
 function Enchantments({ cards, setCard }: CardListProps) {
   const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
-    <div className="mb-4">
-      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
+    <div>
+      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300">
         Enchantments ({total})
       </div>
       {cards.map((card) => (
@@ -63,8 +71,8 @@ function Enchantments({ cards, setCard }: CardListProps) {
 function Creatures({ cards, setCard }: CardListProps) {
   const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
-    <div className="mb-4">
-      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
+    <div>
+      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300">
         Creatures ({total})
       </div>
       {cards.map((card) => (
@@ -83,8 +91,8 @@ function Creatures({ cards, setCard }: CardListProps) {
 function Artifacts({ cards, setCard }: CardListProps) {
   const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
-    <div className="mb-4">
-      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
+    <div>
+      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300">
         Artifacts ({total})
       </div>
       {cards.map((card) => (
@@ -103,8 +111,8 @@ function Artifacts({ cards, setCard }: CardListProps) {
 function Sorceries({ cards, setCard }: CardListProps) {
   const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
-    <div className="mb-4">
-      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
+    <div>
+      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 ">
         Sorceries ({total})
       </div>
       {cards.map((card) => (
@@ -123,8 +131,8 @@ function Sorceries({ cards, setCard }: CardListProps) {
 function Instants({ cards, setCard }: CardListProps) {
   const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
-    <div className="mb-4">
-      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
+    <div>
+      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 ">
         Instants ({total})
       </div>
       {cards.map((card) => (
@@ -143,8 +151,8 @@ function Instants({ cards, setCard }: CardListProps) {
 function Lands({ cards, setCard }: CardListProps) {
   const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
-    <div className="mb-4">
-      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
+    <div>
+      <div className="text-lg font-semibold text-gray-800 border-b border-gray-300">
         Lands ({total})
       </div>
       {cards.map((card) => (

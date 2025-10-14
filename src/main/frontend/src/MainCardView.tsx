@@ -8,16 +8,23 @@ function MainCardView({ card }: MainCardViewProps) {
   return (
     <div>
       {card.image_uris?.normal ? (
-        <img
-          src={card.image_uris.normal}
-          alt={card.name}
+        <div
           style={{
-            width: '251.7px',
-            height: '350px',
-            borderRadius: '12px', // rounded corners
-            objectFit: 'cover', // ensures the image fills the box without distortion
+            borderRadius: '10px',
+            overflow: 'hidden', // ✅ this clips the image to the rounded shape
           }}
-        />
+        >
+          <img
+            src={card.image_uris.normal}
+            alt={card.name}
+            style={{
+              width: '259.7px',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block', // removes small gap below image
+            }}
+          />
+        </div>
       ) : (
         <div>No image available</div>
       )}
