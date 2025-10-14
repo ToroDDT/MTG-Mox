@@ -3,10 +3,10 @@ import BasicList from './BasicList';
 import { ScryfallCard } from './types';
 
 interface CardListProps {
-  cardList: ScryfallCard[];
+  cards: ScryfallCard[];
 }
 
-function CardGroupByType({ cards }: { cards: ScryfallCard[] }) {
+function CardGroupByType({ cards }: CardListProps) {
   const [creatures, setCreatures] = useState<ScryfallCard[]>([]);
   const [enchantments, setEnchantments] = useState<ScryfallCard[]>([]);
   const [artifacts, setArtifacts] = useState<ScryfallCard[]>([]);
@@ -29,143 +29,98 @@ function CardGroupByType({ cards }: { cards: ScryfallCard[] }) {
 
   return (
     <div className="flex flex-row gap-20 ml-140">
-      <Creatures cardList={creatures} />
-      <Enchantments cardList={enchantments} />
-      <Instants cardList={instants} />
-      <Sorceries cardList={sorceries} />
-      <Artifacts cardList={artifacts} />
-      <Lands cardList={lands} />
+      <Creatures cards={creatures} />
+      <Enchantments cards={enchantments} />
+      <Instants cards={instants} />
+      <Sorceries cards={sorceries} />
+      <Artifacts cards={artifacts} />
+      <Lands cards={lands} />
     </div>
   );
 }
 
-function Enchantments({ cardList }: CardListProps) {
-  // Calculate card amount
-  const calculateTotal = () => {
-    let total = 0;
-    cardList.forEach((card) => {
-      total = card.total + total;
-    });
-    return total;
-  };
-
+function Enchantments({ cards }: CardListProps) {
+  const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
     <div className="mb-4">
       <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
-        Enchantments ({calculateTotal()})
+        Enchantments ({total})
       </div>
-      {cardList.map((card) => (
+      {cards.map((card) => (
         <BasicList key={card.id} card={card.name} total={card.total} />
       ))}
     </div>
   );
 }
 
-function Creatures({ cardList }: CardListProps) {
-  // Calculate card amount
-  const calculateTotal = () => {
-    let total = 0;
-    cardList.forEach((card) => {
-      total = card.total + total;
-    });
-    return total;
-  };
+function Creatures({ cards }: CardListProps) {
+  const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
     <div className="mb-4">
       <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
-        Creatures ({calculateTotal()})
+        Creatures ({total})
       </div>
-      {cardList.map((card) => (
+      {cards.map((card) => (
         <BasicList key={card.id} card={card.name} total={card.total} />
       ))}
     </div>
   );
 }
 
-function Artifacts({ cardList }: CardListProps) {
-  // Calculate card amount
-  const calculateTotal = () => {
-    let total = 0;
-    cardList.forEach((card) => {
-      total = card.total + total;
-    });
-    return total;
-  };
-
+function Artifacts({ cards }: CardListProps) {
+  const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
     <div className="mb-4">
       <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
-        Artifacts ({calculateTotal()})
+        Artifacts ({total})
       </div>
-      {cardList.map((card) => (
+      {cards.map((card) => (
         <BasicList key={card.id} card={card.name} total={card.total} />
       ))}
     </div>
   );
 }
 
-function Sorceries({ cardList }: CardListProps) {
-  // Calculate card amount
-  const calculateTotal = () => {
-    let total = 0;
-    cardList.forEach((card) => {
-      total = card.total + total;
-    });
-    return total;
-  };
-
+function Sorceries({ cards }: CardListProps) {
+  const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
     <div className="mb-4">
       <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
-        Sorceries ({calculateTotal()})
+        Sorceries ({total})
       </div>
-      {cardList.map((card) => (
+      {cards.map((card) => (
         <BasicList key={card.id} card={card.name} total={card.total} />
       ))}
     </div>
   );
 }
 
-function Instants({ cardList }: CardListProps) {
-  // Calculate card amount
-  const calculateTotal = () => {
-    let total = 0;
-    cardList.forEach((card) => {
-      total = card.total + total;
-    });
-    return total;
-  };
-
+function Instants({ cards }: CardListProps) {
+  const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
     <div className="mb-4">
       <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
-        Instants ({calculateTotal()})
+        Instants ({total})
       </div>
-      {cardList.map((card) => (
+      {cards.map((card) => (
         <BasicList key={card.id} card={card.name} total={card.total} />
       ))}
     </div>
   );
 }
-function Lands({ cardList }: CardListProps) {
-  // Calculate card amount
-  const calculateTotal = () => {
-    let total = 0;
-    cardList.forEach((card) => {
-      total = card.total + total;
-    });
-    return total;
-  };
 
+function Lands({ cards }: CardListProps) {
+  const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
     <div className="mb-4">
       <div className="text-lg font-semibold text-gray-800 border-b border-gray-300 mb-1">
-        Lands ({calculateTotal()})
+        Lands ({total})
       </div>
-      {cardList.map((card) => (
+      {cards.map((card) => (
         <BasicList key={card.id} card={card.name} total={card.total} />
       ))}
     </div>
   );
 }
+
 export default CardGroupByType;
