@@ -133,6 +133,7 @@ public class MagicCard {
   @CollectionTable(name = "magic_card_image_uris", joinColumns = @JoinColumn(name = "magic_card_id"))
   @MapKeyColumn(name = "uri_key")
   @Column(name = "uri_value")
+  @JsonProperty("image_uris")
   private Map<String, String> imageUris = new HashMap<>();
 
   @ElementCollection
@@ -155,6 +156,7 @@ public class MagicCard {
   @ElementCollection
   @CollectionTable(name = "card_purchase_uris", joinColumns = @JoinColumn(name = "magic_card_id"))
   @Column(name = "uri_value")
+  @JsonProperty("purchase_uris")
   private Map<String, String> purchaseUris = new HashMap<>();
   @ManyToOne
   @JoinColumn(name = "commander_id")
