@@ -4,11 +4,12 @@ import { ScryfallCard, ListLayout } from './types';
 type CardViewProps = {
   listLayout: ListLayout;
   cards: ScryfallCard[];
+  setCard: React.Dispatch<React.SetStateAction<ScryfallCard | undefined>>;
 };
 
-function CardDeckView({ listLayout, cards }: CardViewProps) {
+function CardDeckView({ listLayout, cards, setCard }: CardViewProps) {
   if (listLayout.group == 'Type') {
-    return <CardGroupByType cards={cards} />;
+    return <CardGroupByType cards={cards} setCard={setCard} />;
   }
 }
 

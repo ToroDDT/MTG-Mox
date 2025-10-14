@@ -6,13 +6,18 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
+import { ScryfallCard } from './types';
 
 export default function BasicList({
   card,
   total,
+  setCard,
+  cardObject,
 }: {
   card: string;
   total: number;
+  setCard: React.Dispatch<React.SetStateAction<ScryfallCard>>;
+  cardObject: ScryfallCard;
 }) {
   return (
     <Box
@@ -26,6 +31,7 @@ export default function BasicList({
         <Divider sx={{ my: 0.25, maxWidth: 170 }} />
         <List disablePadding>
           <ListItem
+            onMouseEnter={() => setCard(cardObject)}
             disablePadding
             sx={{
               display: 'flex',
