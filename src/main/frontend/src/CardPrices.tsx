@@ -34,7 +34,7 @@ const VendorButton: React.FC<VendorButtonProps> = ({
 
 const CardActions: React.FC = () => {
   return (
-    <div className="grid gap-2 mt-4 mx-auto max-w-[230px]">
+    <div className="grid gap-2 mt-4 max-w-[230px]">
       {/* Add to Wish List Button */}
       <Button
         variant="outlined"

@@ -11,7 +11,12 @@ function MainCardView({ card }: MainCardViewProps) {
         <img
           src={card.image_uris.normal}
           alt={card.name}
-          style={{ maxWidth: '300px', height: 'auto' }}
+          style={{
+            width: '251.7px',
+            height: '350px',
+            borderRadius: '12px', // rounded corners
+            objectFit: 'cover', // ensures the image fills the box without distortion
+          }}
         />
       ) : (
         <div>No image available</div>
