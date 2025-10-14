@@ -35,7 +35,7 @@ function VendorButton({ url, price, label, outlined }: VendorButtonProps) {
 function CardActions({ card }: CardActionsProps) {
   console.log(card);
   return (
-    <div className="grid gap-2 mt-4 max-w-[230px]">
+    <div className="grid gap-2 ml-3 mt-4 max-w-[230px]">
       {/* Add to Wish List Button */}
       <Button
         variant="outlined"
