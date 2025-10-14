@@ -7,13 +7,25 @@ import CardGallery from './CardGallery';
 import { ListLayout, ScryfallCard, CommanderDeckResponse } from './types';
 import CardDeckView from './CardDeckView';
 import DeckFooter from './DeckFooter';
+import CardActions from './CardPrices';
 
 interface UserResponse {
   commander: string;
   userName: string;
 }
 
+export interface DeckInformation {
+  total: number;
+  sideBoard: number;
+  price: number;
+}
+
 function App() {
+  const [deckInformation, setDeckInformation] = useState<DeckInformation>({
+    total: 0,
+    sideBoard: 0,
+    price: 0,
+  });
   const [listlayout, setListLayout] = useState<ListLayout>({
     sort: 'Price',
     group: 'Type',
@@ -66,7 +78,9 @@ function App() {
         </div>
       </div>
       <CardDeckView listLayout={listlayout} cards={cards} />
-      <DeckFooter />
+
+      <CardActions />
+      <DeckFooter deck={deckInformation} />
     </>
   );
 }
