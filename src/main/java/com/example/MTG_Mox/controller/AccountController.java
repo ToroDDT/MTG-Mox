@@ -164,8 +164,8 @@ public class AccountController {
   }
 
   @GetMapping("/user")
-  public ResponseEntity<?> getProfile(Principal principal) {
-    var userName = principal.getName();
+  public ResponseEntity<?> getProfile() {
+    // var userName = principal.getName();
     String currentCommander = "";
     try {
       currentCommander = commanderService.getCurrentCommander();
@@ -173,7 +173,7 @@ public class AccountController {
       e.printStackTrace();
     }
     Map<String, String> responseData = new HashMap<>();
-    responseData.put("userName", userName);
+    // responseData.put("userName", userName);
     responseData.put("commander", currentCommander);
 
     return new ResponseEntity<>(responseData, HttpStatus.OK);
