@@ -29,7 +29,7 @@ function CardGroupByType({ cards, setCard }: CardListProps) {
   }, [cards]);
 
   return (
-    <div className="flex flex-row gap-20 ml-140">
+    <div className="flex flex-row gap-20 ml-100">
       <Creatures cards={creatures} setCard={setCard} />
       <Enchantments cards={enchantments} setCard={setCard} />
       <Instants cards={instants} setCard={setCard} />

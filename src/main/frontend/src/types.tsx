@@ -157,9 +157,9 @@ export type ScryfallCard = {
   edhrec_rank?: number;
   penny_rank?: number;
   prices: {
-    usd?: string | null;
-    usd_foil?: string | null;
-    usd_etched?: string | null;
+    usd: string;
+    usd_foil?: string;
+    usd_etched: string;
     eur?: string | null;
     eur_foil?: string | null;
     tix?: string | null;

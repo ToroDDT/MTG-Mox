@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import { ScryfallCard } from './types';
 
 interface VendorButtonProps {
   url: string;
@@ -9,12 +10,11 @@ interface VendorButtonProps {
   outlined?: boolean;
 }
 
-const VendorButton: React.FC<VendorButtonProps> = ({
-  url,
-  price,
-  label,
-  outlined,
-}) => {
+interface CardActionsProps {
+  card: ScryfallCard;
+}
+
+function VendorButton({ url, price, label, outlined }: VendorButtonProps) {
   return (
     <a
       href={url}
@@ -22,17 +22,18 @@ const VendorButton: React.FC<VendorButtonProps> = ({
       rel="noreferrer"
       className={`flex justify-between items-center px-4 py-2 w-full text-left rounded ${
         outlined
-          ? 'border border-blue-500 text-blue-500 hover:bg-blue-50'
-          : 'bg-blue-500 text-white hover:bg-blue-600'
+          ? 'border border-purple-500 text-purple-500 hover:bg-purple-50'
+          : 'bg-purple-500 text-white hover:bg-purple-600'
       }`}
     >
       <span className="truncate">{label}</span>
       <span className="ml-2">{price}</span>
     </a>
   );
-};
+}
 
-const CardActions: React.FC = () => {
+function CardActions({ card }: CardActionsProps) {
+  console.log(card);
   return (
     <div className="grid gap-2 mt-4 max-w-[230px]">
       {/* Add to Wish List Button */}
@@ -47,34 +48,25 @@ const CardActions: React.FC = () => {
 
       {/* Vendor Buttons */}
       <VendorButton
-        url="https://partner.tcgplayer.com/c/4949650/1830156/21018"
-        price="$0.26"
+        url={card.purchase_uris.tcgplayer}
+        price={card.prices.usd}
         label="Buy @ TCGplayer"
       />
       <VendorButton
-        url="https://www.cardkingdom.com/mtg/commander-masters/all-that-glitters"
-        price="$0.69"
-        label="Buy @ Card Kingdom"
+        url={card.purchase_uris.cardmarket}
+        price=""
+        label="Buy @ Card Market"
         outlined
       />
       <VendorButton
-        url="https://starcitygames.com/all-that-glitters-sgl-mtg-cmm-009-enn"
-        price="$0.75"
-        label="Buy @ StarCityGames"
+        url={card.purchase_uris.cardhoarder}
+        price=""
+        label="Buy @ Cardhoarder"
         outlined
       />
 
       <hr className="my-2 border-gray-300" />
-
-      {/* Sell Button */}
-      <VendorButton
-        url="#"
-        price="$0.09"
-        label="Sell @ Card Kingdom"
-        outlined
-      />
     </div>
   );
-};
-
+}
 export default CardActions;

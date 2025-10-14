@@ -82,7 +82,7 @@ function App() {
       <div className="flex flex-row">
         <div>
           <MainCardView card={card} />
-          <CardActions />
+          <CardActions card={card} />
         </div>
 
         <CardDeckView listLayout={listlayout} cards={cards} setCard={setCard} />
