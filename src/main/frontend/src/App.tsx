@@ -38,17 +38,46 @@ function App() {
   const [name, setName] = useState<string>('');
   const [cards, setCards] = useState<ScryfallCard[]>([]);
 
+  useEffect(() => {
+    if (!commander || commander.trim() === '') return;
+
+    const fetchCardData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/search-card?commanderName=${encodeURIComponent(commander)}`,
+        );
+        const card: ScryfallCard = await response.json();
+        console.log(card);
+        setCard(card);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchCardData();
+  }, []);
+
   const fetchCardDeck = async () => {
     try {
       const response = await fetch('http://localhost:8080/commander-deck', {
         method: 'GET',
       });
       const cardList: CommanderDeckResponse = await response.json();
+      let deckTotal = 0;
+      cardList.data.forEach((card) => {
+        console.log(card.total);
+        deckTotal = deckTotal + card.total;
+      });
+      setDeckInformation({ ...deckInformation, total: deckTotal });
       setCards(cardList.data); // update state with the latest deck
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
+  useEffect(() => {
+    fetchCardDeck();
+  }, []);
+
   useEffect(() => {
     // Make the HTTP request when the component mounts
     fetch('http://localhost:8080/user')
