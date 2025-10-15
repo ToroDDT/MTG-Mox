@@ -1,18 +1,18 @@
-import { ListLayoutSetter } from "./types";
-import View from "./View";
-import Sort from "./Sort";
-import Group from "./Group";
+import { ListLayoutSetter } from './types';
+import View from './View';
+import Sort from './Sort';
+import Group from './Group';
 
 function CardGallery({ setListLayout }: ListLayoutSetter) {
-		return (
-		<>
-			<div className="flex flex-row justify-between">
-				<View setListLayout={setListLayout} />
-				<Sort setListLayout={setListLayout} />
-				<Group setListLayout={setListLayout} />
-			</div>
-		</>
-	)
+  return (
+    <>
+      <div className="flex flex-row justify-between mr-60">
+        <View setListLayout={setListLayout} />
+        <Sort setListLayout={setListLayout} />
+        <Group setListLayout={setListLayout} />
+      </div>
+    </>
+  );
 }
 
-export default CardGallery; 
+export default CardGallery;

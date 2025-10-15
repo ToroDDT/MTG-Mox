@@ -34,7 +34,7 @@ function App() {
     view: 'Text',
     card: '',
   });
-  const [commander, setCommander] = useState<string>('Necrobloom');
+  const [commander, setCommander] = useState<string>('the necrobloom');
   const [name, setName] = useState<string>('');
   const [cards, setCards] = useState<ScryfallCard[]>([]);
 
@@ -65,7 +65,7 @@ function App() {
     <>
       <Nav />
       <Profile commander={commander} name={name} />
-      <div className="flex flex-col text-left w-full">
+      <div className="flex flex-col text-left w-full border-b border-gray-100">
         <div className="flex flex-row w-full justify-between">
           {/* Left side */}
           <div className="flex ml-15 space-x-2">
@@ -74,7 +74,7 @@ function App() {
           </div>
 
           {/* Right side */}
-          <div className="flex">
+          <div className="flex ">
             <CardGallery setListLayout={setListLayout} />
           </div>
         </div>
@@ -84,7 +84,12 @@ function App() {
           <MainCardView card={card} />
           <CardActions card={card} />
         </div>
-        <CardDeckView listLayout={listlayout} cards={cards} setCard={setCard} />
+        <CardDeckView
+          commander={commander}
+          listLayout={listlayout}
+          cards={cards}
+          setCard={setCard}
+        />
       </div>
       <DeckFooter deck={deckInformation} />
     </>
