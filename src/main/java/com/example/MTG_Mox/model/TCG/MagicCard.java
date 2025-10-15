@@ -56,7 +56,7 @@ public class MagicCard {
   @JsonProperty("type_line")
   private String typeLine;
   @JsonProperty("oracle_text")
-  @Lob
+  @Column(name = "oracle_text", columnDefinition = "text")
   private String oracleText;
 
   @ElementCollection
