@@ -67,7 +67,7 @@ function CardGroupByType({ cards, setCard, commander }: CardGroupByType) {
   }, [cards]);
 
   return (
-    <div className="flex flex-col md:flex-row flex-wrap w-full gap-10 items-start ml-80">
+    <div className="flex flex-col md:flex-row flex-wrap w-full gap-10 items-start ml-30">
       <Commander commander={commanderObject} setCard={setCard} />
       <div className="flex flex-row gap-10 justify-center md:flex-col flex-1">
         <Creatures cards={creatures} setCard={setCard} />
@@ -89,7 +89,7 @@ function CardGroupByType({ cards, setCard, commander }: CardGroupByType) {
 
 function Commander({ commander, setCard }: CommanderProp) {
   return (
-    <div>
+    <div className="mr-40">
       <div className="text-lg font-semibold text-gray-800 ">Commander</div>
       <BasicList
         cardObject={commander}
