@@ -67,7 +67,7 @@ function CardGroupByType({ cards, setCard, commander }: CardGroupByType) {
   }, [cards]);
 
   return (
-    <div className="flex flex-col md:flex-row flex-wrap w-full gap-10 items-start ml-30">
+    <div className="flex flex-col md:flex-col lg:flex-row flex-wrap w-full gap-10 items-start ml-10">
       <Commander commander={commanderObject} setCard={setCard} />
       <div className="flex flex-row gap-10 justify-center md:flex-col flex-1">
         <Creatures cards={creatures} setCard={setCard} />
@@ -89,8 +89,8 @@ function CardGroupByType({ cards, setCard, commander }: CardGroupByType) {
 
 function Commander({ commander, setCard }: CommanderProp) {
   return (
-    <div className="mr-40">
-      <div className="text-lg font-semibold text-gray-800 ">Commander</div>
+    <div>
+      <div className="text-sm font-bold text-gray-800 ">Commander</div>
       <BasicList
         cardObject={commander}
         key={commander.id}
@@ -105,8 +105,8 @@ function Commander({ commander, setCard }: CommanderProp) {
 function Enchantments({ cards, setCard }: CardListProps) {
   const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
-    <div>
-      <div className="text-lg font-semibold text-gray-800 ">
+    <div className="flex flex-col">
+      <div className="text-sm font-bold text-gray-800 ">
         Enchantments ({total})
       </div>
       {cards.map((card) => (
@@ -126,7 +126,7 @@ function Creatures({ cards, setCard }: CardListProps) {
   const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
     <div>
-      <div className="text-lg font-semibold text-gray-800 border-gray-300">
+      <div className="text-sm font-bold text-gray-800 border-gray-300">
         Creatures ({total})
       </div>
       {cards.map((card) => (
@@ -146,7 +146,7 @@ function Artifacts({ cards, setCard }: CardListProps) {
   const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
     <div>
-      <div className="text-lg font-semibold text-gray-800 border-gray-300">
+      <div className="text-sm font-bold text-gray-800 border-gray-300">
         Artifacts ({total})
       </div>
       {cards.map((card) => (
@@ -166,7 +166,7 @@ function Sorceries({ cards, setCard }: CardListProps) {
   const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
     <div>
-      <div className="text-lg font-semibold text-gray-800  border-gray-300 ">
+      <div className="text-sm font-bold text-gray-800  border-gray-300 ">
         Sorceries ({total})
       </div>
       {cards.map((card) => (
@@ -186,7 +186,7 @@ function Instants({ cards, setCard }: CardListProps) {
   const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
     <div>
-      <div className="text-lg font-semibold text-gray-800  border-gray-300 ">
+      <div className="text-sm font-bold text-gray-800  border-gray-300 ">
         Instants ({total})
       </div>
       {cards.map((card) => (
@@ -206,7 +206,7 @@ function Lands({ cards, setCard }: CardListProps) {
   const total = cards.reduce((sum, card) => sum + card.total, 0);
   return (
     <div>
-      <div className="text-lg font-semibold text-gray-800  border-gray-300">
+      <div className="text-sm font-bold text-gray-800  border-gray-300">
         Lands ({total})
       </div>
       {cards.map((card) => (

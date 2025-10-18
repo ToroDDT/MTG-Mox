@@ -23,12 +23,24 @@ export default function BasicList({
     <Box
       sx={{
         width: '100%',
-        maxWidth: 250,
+        maxWidth: '100%',
         bgcolor: 'background.paper',
       }}
     >
       <nav aria-label="card list">
-        <Divider sx={{ my: 0.25, maxWidth: 170 }} />
+        <Divider
+          sx={{
+            my: 0.25,
+            width: {
+              xs: '70%',
+              sm: '70%',
+              md: '470px',
+              lg: '200px', // large desktops
+              xl: '270px', // very large / ultra-wide
+            },
+            alignSelf: 'center',
+          }}
+        />
         <List disablePadding>
           <ListItem
             onMouseEnter={() => setCard(cardObject)}
@@ -38,14 +50,14 @@ export default function BasicList({
               alignItems: 'center',
               gap: 1,
               px: 1,
-              minHeight: 28, // slightly tighter
+              minHeight: 28,
               maxWidth: 170,
             }}
           >
             <Typography
               variant="body2"
               sx={{
-                fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' }, // responsive font sizes
+                fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' },
                 fontWeight: 500,
                 minWidth: 16,
               }}
@@ -55,7 +67,7 @@ export default function BasicList({
             <ListItemText
               primary={card}
               primaryTypographyProps={{
-                fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' },
+                fontSize: '0.95rem',
                 fontWeight: 400,
               }}
             />

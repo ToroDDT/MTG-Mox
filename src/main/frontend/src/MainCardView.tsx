@@ -18,7 +18,7 @@ function MainCardView({ card }: MainCardViewProps) {
             src={card.image_uris.normal}
             alt={card.name}
             style={{
-              width: '259.7px',
+              width: '299.7px',
               height: '100%',
               objectFit: 'cover',
               display: 'block', // removes small gap below image
